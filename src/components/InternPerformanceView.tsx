@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { dbService } from '../services/db';
 import type { Profile, DailyReport, InternTask } from '../types';
-import { Users, TrendingUp, CheckCircle, Plus, Calendar, Target, Clock } from 'lucide-react';
+import { Users, TrendingUp, CheckCircle, Plus, Calendar, Target, Clock, AlertCircle } from 'lucide-react';
+import { ResponsiveContainer, ComposedChart, Area, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
 
 interface Props {
   interns: Profile[];
@@ -66,7 +67,7 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
   const daysActive = new Set(reports.map(r => r.date)).size;
   const avgHoursPerDay = daysActive > 0 ? (totalHours / daysActive).toFixed(1) : '0';
 
-  // Bar Chart Data Preparation (Last 14 days)
+  // Detailed Chart Data Preparation (Last 14 days)
   const last14Days = Array.from({ length: 14 }).map((_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (13 - i));
@@ -75,11 +76,72 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
 
   const chartData = last14Days.map(date => {
     const dayReports = reports.filter(r => r.date === date);
+    const dayTasks = tasks.filter(t => t.created_at.startsWith(date) && t.status === 'completed');
+    
     const hrs = dayReports.reduce((sum, r) => sum + Number(r.hours_worked || 0), 0);
-    return { date, hours: hrs };
+    const challengesText = dayReports.map(r => r.challenges).filter(Boolean).join(' | ');
+    const workCompletedText = dayReports.map(r => r.work_completed).filter(Boolean).join(' | ');
+    const objectivesText = dayReports.map(r => r.objectives).filter(Boolean).join(' | ');
+
+    return { 
+      date, 
+      displayDate: date.split('-').slice(1).join('/'),
+      hours: hrs,
+      tasksCompleted: dayTasks.length,
+      challenges: challengesText,
+      work_completed: workCompletedText,
+      objectives: objectivesText,
+      isToday: date === new Date().toISOString().split('T')[0]
+    };
   });
 
-  const maxHours = Math.max(...chartData.map(d => d.hours), 8); // At least 8 for scale
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#C5A85C]/30 max-w-xs z-50">
+          <p className="text-xs font-bold text-[#0D4855] uppercase tracking-wider mb-3 pb-2 border-b border-gray-100 flex justify-between items-center">
+            <span>{data.date}</span>
+            {data.isToday && <span className="text-[9px] bg-[#C5A85C]/20 text-[#C5A85C] px-2 py-0.5 rounded-full">TODAY</span>}
+          </p>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#0D4855]" />
+              <span className="text-sm font-bold text-gray-700">{data.hours} <span className="text-xs font-normal text-gray-500">Hours Worked</span></span>
+            </div>
+            {data.tasksCompleted > 0 && (
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#C5A85C]" />
+                <span className="text-sm font-bold text-gray-700">{data.tasksCompleted} <span className="text-xs font-normal text-gray-500">Extra Tasks Completed</span></span>
+              </div>
+            )}
+            
+            {data.work_completed && (
+              <div className="mt-3 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+                <p className="text-[10px] font-bold text-[#0D4855] mb-1">Work Completed</p>
+                <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">{data.work_completed}</p>
+              </div>
+            )}
+            
+            {data.challenges && (
+              <div className="mt-2 bg-red-50 p-2.5 rounded-lg border border-red-100 flex gap-2 items-start">
+                <AlertCircle className="w-3.5 h-3.5 text-red-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-[10px] font-bold text-red-700 mb-0.5">Challenges Faced</p>
+                  <p className="text-[11px] text-red-600 line-clamp-2 leading-relaxed">{data.challenges}</p>
+                </div>
+              </div>
+            )}
+            
+            {data.hours === 0 && !data.work_completed && (
+              <div className="text-center py-2 text-xs text-gray-400 italic">No activity logged</div>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-8">
@@ -190,59 +252,62 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
               
               <h3 className="text-md font-bold text-[#0D4855] mb-8 flex items-center gap-2 relative z-10">
                 <TrendingUp className="w-5 h-5 text-[#C5A85C]" />
-                14-Day Performance Tracker
+                Detailed Performance Timeline
               </h3>
               
-              {/* Dense Pure CSS Bar Chart */}
-              <div className="h-56 flex items-end justify-between gap-1 md:gap-2 mt-4 pb-2 relative z-10">
-                {/* Horizontal Guide Lines with Labels */}
-                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                  {[1, 0.75, 0.5, 0.25, 0].map((tick, idx) => (
-                    <div key={idx} className="relative w-full border-t border-dashed border-gray-200/80">
-                      <span className="absolute -top-3.5 -left-1 text-[9px] font-bold text-gray-300">
-                        {Math.round(maxHours * tick)}h
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bars */}
-                <div className="w-full h-full flex items-end justify-between gap-1 sm:gap-2 pl-4">
-                  {chartData.map((d, i) => {
-                    const heightPercent = (d.hours / maxHours) * 100;
-                    const isWeekend = new Date(d.date).getDay() === 0 || new Date(d.date).getDay() === 6;
-                    const isToday = d.date === new Date().toISOString().split('T')[0];
-                    
-                    return (
-                      <div key={i} className="flex flex-col items-center flex-1 group z-10 h-full justify-end relative">
-                        {/* Background track to make graph look denser */}
-                        <div className="absolute bottom-0 w-full max-w-[28px] h-full bg-gray-50 rounded-t-md opacity-50 group-hover:bg-gray-100 transition-colors" />
-                        
-                        {/* Actual Bar */}
-                        <div 
-                          className={`w-full max-w-[28px] rounded-t-md transition-all duration-500 relative ${
-                            isToday 
-                              ? 'bg-gradient-to-t from-[#C5A85C] to-[#E3CD90] shadow-[0_0_15px_rgba(197,168,92,0.3)]' 
-                              : 'bg-gradient-to-t from-[#0D4855] to-[#1A6C7E] group-hover:from-[#115b6b] group-hover:to-[#228499]'
-                          }`}
-                          style={{ height: `${heightPercent}%`, minHeight: d.hours > 0 ? '4px' : '0' }}
-                        >
-                          {/* Tooltip */}
-                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0D4855] text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 flex flex-col items-center">
-                            <span>{d.hours} hrs</span>
-                            <span className="text-[8px] text-[#C5A85C] uppercase">{d.date}</span>
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#0D4855] rotate-45" />
-                          </div>
-                        </div>
-                        <span className={`text-[9px] mt-3 font-bold transform -rotate-45 -translate-x-1 whitespace-nowrap ${
-                          isToday ? 'text-[#C5A85C]' : isWeekend ? 'text-gray-300' : 'text-gray-500'
-                        }`}>
-                          {isToday ? 'Today' : d.date.split('-').slice(1).join('/')}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+              {/* Recharts Composed Chart */}
+              <div className="h-72 w-full relative z-10 -ml-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+                    <defs>
+                      <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0D4855" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#0D4855" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorToday" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#C5A85C" stopOpacity={0.5}/>
+                        <stop offset="95%" stopColor="#C5A85C" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" opacity={0.5} />
+                    <XAxis 
+                      dataKey="displayDate" 
+                      tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 600 }} 
+                      tickLine={false}
+                      axisLine={{ stroke: '#E5E7EB' }}
+                      dy={10}
+                    />
+                    <YAxis 
+                      yAxisId="left"
+                      tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 600 }} 
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(val) => `${val}h`}
+                      dx={-10}
+                    />
+                    <Tooltip content={<CustomTooltip />} cursor={{ fill: '#FAF8F5', opacity: 0.5 }} />
+                    <Area 
+                      yAxisId="left"
+                      type="monotone" 
+                      dataKey="hours" 
+                      stroke="#0D4855" 
+                      strokeWidth={3}
+                      fillOpacity={1} 
+                      fill="url(#colorHours)" 
+                      activeDot={{ r: 6, fill: '#C5A85C', stroke: '#fff', strokeWidth: 2 }}
+                    />
+                    <Bar 
+                      yAxisId="left"
+                      dataKey="hours" 
+                      barSize={20}
+                      radius={[4, 4, 0, 0]}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.isToday ? 'url(#colorToday)' : 'transparent'} stroke={entry.isToday ? '#C5A85C' : 'transparent'} strokeWidth={1} />
+                      ))}
+                    </Bar>
+                  </ComposedChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
