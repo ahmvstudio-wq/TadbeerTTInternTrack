@@ -182,102 +182,103 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
   };
 
   return (
-    <div className="h-full flex flex-col p-2 sm:p-4 overflow-hidden gap-3">
+    <div className="h-full w-full max-w-[1600px] mx-auto flex flex-col p-3 md:p-6 lg:p-8 overflow-hidden gap-4 md:gap-6">
       
       {/* Page Title */}
-      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="text-left hidden md:block">
-          <h2 className="text-xl font-bold text-[#0D4855]">
+          <h2 className="text-xl md:text-3xl font-bold text-[#0D4855]">
             Admin Control Panel
           </h2>
+          <p className="text-sm text-gray-500 mt-1 font-medium">Manage interns, monitor daily logs, and review performance</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex w-full md:w-auto items-center p-1 bg-[#FAF8F5] rounded-xl border border-gray-200 shadow-inner">
+        <div className="flex w-full md:w-auto items-center p-1.5 bg-[#FAF8F5] rounded-xl border border-gray-200 shadow-inner">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-[10px] transition-all ${
+            className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-bold text-[10px] md:text-sm transition-all ${
               activeTab === 'overview'
                 ? 'bg-white text-[#0D4855] shadow-sm'
                 : 'text-gray-500 hover:text-[#0D4855]'
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5" />
+            <LayoutDashboard className="w-4 h-4 md:w-5 md:h-5" />
             Overview
           </button>
           <button
             onClick={() => setActiveTab('performance')}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-[10px] transition-all ${
+            className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-lg font-bold text-[10px] md:text-sm transition-all ${
               activeTab === 'performance'
                 ? 'bg-white text-[#0D4855] shadow-sm'
                 : 'text-gray-500 hover:text-[#0D4855]'
             }`}
           >
-            <TrendingUp className="w-3.5 h-3.5" />
+            <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
             Performance
           </button>
         </div>
       </div>
 
       {activeTab === 'overview' ? (
-        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3 pr-1">
+        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-4 md:gap-6 pr-1 md:pr-2">
           {/* Aggregate Cards */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-3 pb-1">
+          <div className="flex overflow-x-auto md:grid md:grid-cols-4 snap-x snap-mandatory hide-scrollbar gap-3 md:gap-6 pb-1 md:pb-0 flex-shrink-0">
             {/* Total Interns */}
-            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-lg bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
-                <Users className="w-4 h-4" />
+            <div className="min-w-[140px] md:min-w-0 flex-1 snap-start bg-white p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-200/50 shadow-sm flex items-center gap-3 md:gap-4 text-left">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
+                <Users className="w-4 h-4 md:w-6 md:h-6" />
               </div>
               <div>
-                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                <span className="text-lg md:text-2xl font-bold text-[#0D4855] leading-none">
                   {stats.totalInterns}
                 </span>
-                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                <p className="text-[8px] md:text-[10px] uppercase tracking-wider font-bold md:font-semibold text-gray-400 mt-0.5 md:mt-1">
                   Interns
                 </p>
               </div>
             </div>
 
             {/* Reports Today */}
-            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-lg bg-green-500/5 flex items-center justify-center text-green-600">
-                <CheckCircle2 className="w-4 h-4" />
+            <div className="min-w-[140px] md:min-w-0 flex-1 snap-start bg-white p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-200/50 shadow-sm flex items-center gap-3 md:gap-4 text-left">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-green-500/5 flex items-center justify-center text-green-600">
+                <CheckCircle2 className="w-4 h-4 md:w-6 md:h-6" />
               </div>
               <div>
-                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                <span className="text-lg md:text-2xl font-bold text-[#0D4855] leading-none">
                   {stats.reportsToday}
                 </span>
-                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                <p className="text-[8px] md:text-[10px] uppercase tracking-wider font-bold md:font-semibold text-gray-400 mt-0.5 md:mt-1">
                   Logs Today
                 </p>
               </div>
             </div>
 
             {/* Pending Reports */}
-            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-lg bg-yellow-500/5 flex items-center justify-center text-yellow-600">
-                <AlertCircle className="w-4 h-4" />
+            <div className="min-w-[140px] md:min-w-0 flex-1 snap-start bg-white p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-200/50 shadow-sm flex items-center gap-3 md:gap-4 text-left">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-yellow-500/5 flex items-center justify-center text-yellow-600">
+                <AlertCircle className="w-4 h-4 md:w-6 md:h-6" />
               </div>
               <div>
-                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                <span className="text-lg md:text-2xl font-bold text-[#0D4855] leading-none">
                   {stats.pendingReports}
                 </span>
-                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                <p className="text-[8px] md:text-[10px] uppercase tracking-wider font-bold md:font-semibold text-gray-400 mt-0.5 md:mt-1">
                   Pending
                 </p>
               </div>
             </div>
 
             {/* Total Hours */}
-            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-lg bg-[#C5A85C]/5 flex items-center justify-center text-[#C5A85C]">
-                <Clock className="w-4 h-4" />
+            <div className="min-w-[140px] md:min-w-0 flex-1 snap-start bg-white p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-200/50 shadow-sm flex items-center gap-3 md:gap-4 text-left">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-[#C5A85C]/5 flex items-center justify-center text-[#C5A85C]">
+                <Clock className="w-4 h-4 md:w-6 md:h-6" />
               </div>
               <div>
-                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                <span className="text-lg md:text-2xl font-bold text-[#0D4855] leading-none">
                   {stats.totalHours.toFixed(1)}
                 </span>
-                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                <p className="text-[8px] md:text-[10px] uppercase tracking-wider font-bold md:font-semibold text-gray-400 mt-0.5 md:mt-1">
                   Total Hrs
                 </p>
               </div>
@@ -285,37 +286,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           </div>
 
       {/* Intern Invites & Magic Links Management Console */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         
         {/* Generate Invite Form */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-gray-200/50 p-4 text-left shadow-sm">
-          <div className="flex items-center gap-2 mb-3">
-            <Link2 className="w-4 h-4 text-[#C5A85C]" />
-            <h3 className="text-sm font-bold text-[#0D4855]">
+        <div className="lg:col-span-1 bg-white rounded-2xl md:rounded-3xl border border-gray-200/50 p-4 md:p-6 text-left shadow-sm">
+          <div className="flex items-center gap-2 mb-4 md:mb-5">
+            <Link2 className="w-4 h-4 md:w-5 md:h-5 text-[#C5A85C]" />
+            <h3 className="text-sm md:text-lg font-bold text-[#0D4855]">
               Invite Intern
             </h3>
           </div>
           
-          <form onSubmit={handleInvite} className="space-y-3">
+          <form onSubmit={handleInvite} className="space-y-3 md:space-y-4">
             {inviteError && (
-              <div className="p-2 bg-red-50 text-red-600 border border-red-100 rounded-lg text-[10px] font-bold">
+              <div className="p-2 md:p-3 bg-red-50 text-red-600 border border-red-100 rounded-lg text-[10px] md:text-xs font-bold">
                 {inviteError}
               </div>
             )}
             
             {inviteSuccess && (
-              <div className="p-2 bg-green-50 text-green-700 border border-green-100 rounded-lg text-[10px] font-bold">
+              <div className="p-2 md:p-3 bg-green-50 text-green-700 border border-green-100 rounded-lg text-[10px] md:text-xs font-bold">
                 {inviteSuccess}
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-col gap-3">
               <input
                 type="text"
                 placeholder="Name *"
                 value={inviteName}
                 onChange={(e) => setInviteName(e.target.value)}
-                className="flex-1 px-2.5 py-1.5 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[10px] focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-bold"
+                className="w-full px-3 py-2 md:px-4 md:py-3 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-semibold"
                 required
               />
               <input
@@ -323,37 +324,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
                 placeholder="Email *"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="flex-1 px-2.5 py-1.5 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[10px] focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-bold"
+                className="w-full px-3 py-2 md:px-4 md:py-3 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-semibold"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-1.5 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-[10px] uppercase tracking-wider rounded-lg shadow-sm"
+              className="w-full py-2.5 md:py-3.5 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-[10px] md:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-all"
             >
-              Generate Magic Link
+              Generate Link
             </button>
           </form>
 
           {/* Generated Magic Link Box */}
           {generatedLink && (
-            <div className="mt-3 p-2 bg-[#FAF8F5] border border-[#C5A85C]/25 rounded-lg space-y-1.5">
-              <span className="text-[8px] uppercase tracking-wider font-bold text-[#C5A85C]">
-                Copy Secure Link
+            <div className="mt-4 md:mt-5 p-3 md:p-4 bg-[#FAF8F5] border border-[#C5A85C]/30 rounded-xl space-y-2">
+              <span className="text-[9px] md:text-[10px] uppercase tracking-wider font-bold text-[#C5A85C]">
+                Shareable Magic Link
               </span>
-              <div className="flex gap-1.5 items-center">
+              <div className="flex gap-2 items-center">
                 <input
                   type="text"
                   value={generatedLink}
                   readOnly
-                  className="flex-1 bg-white border border-gray-200 px-2 py-1 rounded text-[9px] font-mono text-gray-600 focus:outline-none select-all"
+                  className="flex-1 bg-white border border-gray-200 px-3 py-2 rounded-lg text-xs font-mono text-gray-600 focus:outline-none select-all"
                 />
                 <button
                   onClick={() => handleCopyLink(generatedLink)}
-                  className="p-1.5 bg-white hover:bg-gray-50 border border-gray-200 rounded text-gray-500"
+                  className="p-2 md:p-2.5 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-gray-500 shadow-sm"
                 >
-                  {copiedLink ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                  {copiedLink ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -361,20 +362,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
         </div>
 
         {/* Active / Pending Invitations List */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200/50 p-4 text-left shadow-sm flex flex-col max-h-[180px]">
-          <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
-            <div className="flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-[#C5A85C]" />
-              <h3 className="text-sm font-bold text-[#0D4855]">
-                Pending ({invitations.length})
+        <div className="lg:col-span-2 bg-white rounded-2xl md:rounded-3xl border border-gray-200/50 p-4 md:p-6 text-left shadow-sm flex flex-col md:max-h-[350px]">
+          <div className="flex items-center justify-between mb-3 md:mb-4 pb-2 md:pb-3 border-b border-gray-100">
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 md:w-5 md:h-5 text-[#C5A85C]" />
+              <h3 className="text-sm md:text-lg font-bold text-[#0D4855]">
+                Pending Invites ({invitations.length})
               </h3>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto space-y-2 md:space-y-3 pr-1 md:pr-2 custom-scrollbar">
             {invitations.length === 0 ? (
-              <div className="text-center py-4 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
-                <p className="text-[10px] text-gray-400 font-bold">No pending invitations.</p>
+              <div className="text-center py-6 md:py-10 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
+                <p className="text-[10px] md:text-sm text-gray-400 font-bold md:font-semibold">No pending invitations.</p>
               </div>
             ) : (
               invitations.map((invite) => {
@@ -382,29 +383,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
                 return (
                   <div
                     key={invite.id}
-                    className="p-2 bg-[#FAF8F5] border border-gray-200 rounded-lg flex items-center justify-between gap-2"
+                    className="p-3 md:p-4 bg-[#FAF8F5] border border-gray-200 rounded-xl flex items-center justify-between gap-3"
                   >
                     <div className="flex flex-col text-left flex-1 min-w-0">
-                      <span className="text-[10px] font-bold text-[#0D4855] truncate">
+                      <span className="text-xs md:text-sm font-bold text-[#0D4855] truncate">
                         {invite.name}
                       </span>
-                      <span className="text-[8px] text-gray-500 font-medium truncate">
+                      <span className="text-[10px] md:text-xs text-gray-500 font-medium truncate mt-0.5">
                         {invite.email}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
                       <button
                         onClick={() => handleCopyLink(inviteLink)}
-                        className="p-1.5 bg-white border border-gray-200 rounded text-gray-500 hover:text-[#0D4855]"
+                        className="p-2 md:p-2.5 bg-white border border-gray-200 rounded-lg text-gray-500 hover:text-[#0D4855] shadow-sm"
                       >
-                        <Copy className="w-3 h-3" />
+                        <Copy className="w-3.5 h-3.5 md:w-4 md:h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteInvite(invite.id)}
-                        className="p-1.5 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded text-gray-400 hover:text-red-600"
+                        className="p-2 md:p-2.5 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded-lg text-gray-400 hover:text-red-600 shadow-sm"
                       >
-                        <Trash2 className="w-3 h-3" />
+                        <Trash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                       </button>
                     </div>
                   </div>
@@ -417,26 +418,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       </div>
 
       {/* Advanced Filters Panel */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-3 text-left transition-all flex-shrink-0">
-        <div className="flex items-center gap-1.5 mb-2">
-          <Filter className="w-3.5 h-3.5 text-[#C5A85C]" />
-          <h4 className="text-[10px] uppercase tracking-wider font-bold text-[#0D4855]">
+      <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-200/50 p-3 md:p-6 text-left transition-all flex-shrink-0">
+        <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-4">
+          <Filter className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#C5A85C]" />
+          <h4 className="text-[10px] md:text-sm uppercase tracking-wider font-bold text-[#0D4855]">
             Filters
           </h4>
         </div>
 
-        <div className="flex overflow-x-auto gap-2 pb-1 hide-scrollbar">
+        <div className="flex md:grid md:grid-cols-5 overflow-x-auto md:overflow-visible gap-2 md:gap-4 pb-1 md:pb-0 hide-scrollbar md:hide-scrollbar-none">
           {/* Keyword Search */}
-          <div className="relative flex-shrink-0 w-32">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-400">
-              <Search className="w-3 h-3" />
+          <div className="relative flex-shrink-0 w-32 md:w-auto">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3 text-gray-400">
+              <Search className="w-3 h-3 md:w-4 md:h-4" />
             </span>
             <input
               type="text"
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 md:pl-10 pr-2 py-1.5 md:py-2 bg-[#FAF8F5] border border-gray-200 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold md:font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
             />
           </div>
 
@@ -444,7 +445,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           <select
             value={selectedIntern}
             onChange={(e) => setSelectedIntern(e.target.value)}
-            className="flex-shrink-0 w-24 px-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+            className="flex-shrink-0 w-24 md:w-auto px-2 md:px-4 py-1.5 md:py-2 bg-[#FAF8F5] border border-gray-200 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold md:font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
           >
             <option value="all">All Interns</option>
             {interns.map(i => (
@@ -456,7 +457,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex-shrink-0 w-24 px-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+            className="flex-shrink-0 w-24 md:w-auto px-2 md:px-4 py-1.5 md:py-2 bg-[#FAF8F5] border border-gray-200 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold md:font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
           >
             <option value="all">All Status</option>
             <option value="completed">Completed</option>
@@ -465,29 +466,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           </select>
 
           {/* Start Date */}
-          <div className="relative flex-shrink-0 w-28">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-[#C5A85C]">
-              <Calendar className="w-3 h-3" />
+          <div className="relative flex-shrink-0 w-28 md:w-auto">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3 text-[#C5A85C]">
+              <Calendar className="w-3 h-3 md:w-4 md:h-4" />
             </span>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 md:pl-10 pr-2 py-1.5 md:py-2 bg-[#FAF8F5] border border-gray-200 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold md:font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
               title="Start Date"
             />
           </div>
 
           {/* End Date */}
-          <div className="relative flex-shrink-0 w-28">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-[#C5A85C]">
-              <Calendar className="w-3 h-3" />
+          <div className="relative flex-shrink-0 w-28 md:w-auto">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3 text-[#C5A85C]">
+              <Calendar className="w-3 h-3 md:w-4 md:h-4" />
             </span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 md:pl-10 pr-2 py-1.5 md:py-2 bg-[#FAF8F5] border border-gray-200 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold md:font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
               title="End Date"
             />
           </div>
@@ -495,74 +496,74 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       </div>
 
       {/* Main Data Table Panel */}
-      <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200/50 p-3 flex flex-col min-h-0">
+      <div className="flex-1 bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-200/50 p-3 md:p-6 flex flex-col min-h-0">
         
         {/* Table Title and Export options */}
-        <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-gray-100 flex-shrink-0">
-          <div className="flex items-center gap-1.5">
-            <FileText className="w-4 h-4 text-[#C5A85C]" />
-            <h3 className="text-sm font-bold text-[#0D4855]">
+        <div className="flex items-center justify-between gap-2 mb-3 md:mb-5 pb-2 md:pb-4 border-b border-gray-100 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <FileText className="w-4 h-4 md:w-5 md:h-5 text-[#C5A85C]" />
+            <h3 className="text-sm md:text-lg font-bold text-[#0D4855]">
               Daily Logs ({filteredReports.length})
             </h3>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2 md:gap-3">
             <button
               onClick={() => exportToExcel(filteredReports)}
-              className="px-2 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-[9px] font-bold rounded text-green-600 shadow-sm"
+              className="px-3 py-1.5 md:px-4 md:py-2 bg-white hover:bg-gray-50 border border-gray-200 text-[10px] md:text-xs font-bold md:font-semibold rounded-lg md:rounded-xl text-green-600 shadow-sm transition-all"
             >
-              CSV
+              CSV Export
             </button>
             <button
               onClick={() => exportToPDF(filteredReports)}
-              className="px-2 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-[9px] font-bold rounded text-red-500 shadow-sm"
+              className="px-3 py-1.5 md:px-4 md:py-2 bg-white hover:bg-gray-50 border border-gray-200 text-[10px] md:text-xs font-bold md:font-semibold rounded-lg md:rounded-xl text-red-500 shadow-sm transition-all"
             >
-              PDF
+              PDF Export
             </button>
           </div>
         </div>
 
         {/* Data Table */}
-        <div className="flex-1 overflow-auto custom-scrollbar">
+        <div className="flex-1 overflow-auto custom-scrollbar pr-1 md:pr-2">
           {filteredReports.length === 0 ? (
-            <div className="text-center py-8 bg-gray-50/50 rounded-lg border border-dashed border-gray-200">
-              <p className="text-[10px] text-gray-400 font-bold">No journal reports found.</p>
+            <div className="text-center py-10 md:py-16 bg-gray-50/50 rounded-xl md:rounded-2xl border border-dashed border-gray-200">
+              <p className="text-[10px] md:text-sm text-gray-400 font-bold md:font-semibold">No journal reports found.</p>
             </div>
           ) : (
-            <table className="w-full text-left border-collapse min-w-[320px]">
+            <table className="w-full text-left border-collapse min-w-[400px] md:min-w-full">
               <thead className="sticky top-0 bg-white shadow-[0_1px_0_#f3f4f6]">
-                <tr className="text-[8px] uppercase tracking-wider font-bold text-gray-400">
-                  <th className="py-2 px-1">Intern</th>
-                  <th className="py-2 px-1">Date</th>
-                  <th className="py-2 px-1">Status</th>
-                  <th className="py-2 px-1 text-right">View</th>
+                <tr className="text-[9px] md:text-xs uppercase tracking-wider font-bold text-gray-400">
+                  <th className="py-2.5 md:py-4 px-2">Intern</th>
+                  <th className="py-2.5 md:py-4 px-2">Date</th>
+                  <th className="py-2.5 md:py-4 px-2">Status</th>
+                  <th className="py-2.5 md:py-4 px-2 text-right">View</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 text-[10px] text-[#0D4855]">
+              <tbody className="divide-y divide-gray-100 text-[10px] md:text-sm text-[#0D4855]">
                 {filteredReports.map((report) => (
                   <tr
                     key={report.id}
                     onClick={() => onOpenReport(report)}
                     className="hover:bg-gray-50/70 transition-all cursor-pointer group"
                   >
-                    <td className="py-2 px-1 font-bold text-[#0D4855]">
+                    <td className="py-2 md:py-3 px-2 font-bold text-[#0D4855]">
                       {report.intern_name || 'N/A'}
                     </td>
-                    <td className="py-2 px-1 font-semibold text-gray-500">
+                    <td className="py-2 md:py-3 px-2 font-semibold text-gray-500">
                       {report.date.split('-').slice(1).join('/')}
                     </td>
-                    <td className="py-2 px-1">
+                    <td className="py-2 md:py-3 px-2">
                       {getStatusBadge(report.status)}
                     </td>
-                    <td className="py-2 px-1 text-right">
+                    <td className="py-2 md:py-3 px-2 text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           onOpenReport(report);
                         }}
-                        className="inline-flex items-center justify-center w-6 h-6 bg-white hover:bg-gray-100 rounded border border-gray-200 text-[#C5A85C] shadow-sm"
+                        className="inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-white hover:bg-gray-100 rounded-md border border-gray-200 text-[#C5A85C] shadow-sm transition-colors"
                       >
-                        <Eye className="w-3 h-3" />
+                        <Eye className="w-3 h-3 md:w-4 md:h-4" />
                       </button>
                     </td>
                   </tr>
