@@ -3,14 +3,164 @@ import { dbService } from '../services/db';
 import type { DailyReport, Profile, Invitation } from '../types';
 import { exportToExcel } from '../utils/excelExport';
 import { exportToPDF } from '../utils/pdfExport';
-import { Users, FileText, AlertCircle, Clock, Search, Filter, Calendar, FileDown, Eye, CheckCircle2, Link2, Copy, Check, Trash2, Mail, LayoutDashboard, TrendingUp } from 'lucide-react';
+import { Users, FileText, AlertCircle, Clock, Search, Filter, Calendar, FileDown, Eye, CheckCircle2, Link2, Copy, Check, Trash2, Mail, LayoutDashboard, TrendingUp, BookOpen, MessageSquare, Send, HelpCircle, Sparkles } from 'lucide-react';
 import { InternPerformanceView } from './InternPerformanceView';
 
-interface AdminDashboardProps {
+interface DayBookCardProps {
+  report: DailyReport;
+  adminUser: Profile;
+  onRefresh: () => void;
   onOpenReport: (report: DailyReport) => void;
 }
 
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) => {
+const DayBookCard: React.FC<DayBookCardProps> = ({ report, adminUser, onRefresh, onOpenReport }) => {
+  const [commentText, setCommentText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handlePostComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await dbService.addComment(report.id, adminUser.id, commentText.trim());
+      setCommentText('');
+      onRefresh();
+    } catch (err) {
+      console.error('Failed to post inline comment:', err);
+      alert('Failed to post comment.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-50 text-green-700 border border-green-200/30';
+      case 'in_progress': return 'bg-yellow-50 text-yellow-700 border border-yellow-200/30';
+      case 'blocked': return 'bg-red-50 text-red-700 border border-red-200/30';
+      default: return 'bg-gray-50 text-gray-700';
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-6 text-left hover:shadow-md transition-all flex flex-col md:flex-row gap-6">
+      
+      {/* Left side info (Intern metadata & Date) */}
+      <div className="w-full md:w-1/4 flex flex-row md:flex-col justify-between md:justify-start items-start gap-4 pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-gray-100 pr-0 md:pr-6">
+        <div className="space-y-1.5">
+          <h4 className="text-md font-bold text-[#0D4855] leading-tight">
+            {report.intern_name || 'N/A'}
+          </h4>
+          <span className="text-[10px] text-gray-500 font-semibold block uppercase tracking-wider">
+            {report.date}
+          </span>
+        </div>
+        <div className="flex flex-col md:items-start items-end gap-2">
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold ${getStatusColor(report.status)}`}>
+            {report.status.toUpperCase().replace('_', ' ')}
+          </span>
+          <span className="text-xs font-bold text-gray-500">
+            {report.hours_worked} hrs worked
+          </span>
+        </div>
+      </div>
+
+      {/* Middle side (Journal text sections) */}
+      <div className="w-full md:w-2/4 space-y-4">
+        {/* Work Completed */}
+        <div className="space-y-1">
+          <h5 className="text-[10px] uppercase font-bold text-[#C5A85C] tracking-wider">Work Completed</h5>
+          <p className="text-xs text-gray-700 font-medium leading-relaxed whitespace-pre-wrap">{report.work_completed}</p>
+        </div>
+
+        {/* Objectives */}
+        <div className="space-y-1">
+          <h5 className="text-[10px] uppercase font-bold text-[#C5A85C] tracking-wider">Objectives</h5>
+          <p className="text-xs text-gray-600 font-medium leading-relaxed whitespace-pre-wrap">{report.objectives}</p>
+        </div>
+
+        {/* Challenges */}
+        {report.challenges && (
+          <div className="bg-red-50/50 p-3 rounded-2xl border border-red-105 flex gap-2.5 items-start">
+            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h5 className="text-[10px] uppercase font-bold text-red-700 tracking-wider">Challenges Faced</h5>
+              <p className="text-xs text-red-650 leading-relaxed font-medium whitespace-pre-wrap">{report.challenges}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="pt-2">
+          <button
+            onClick={() => onOpenReport(report)}
+            className="inline-flex items-center gap-1 text-[10px] font-bold text-[#0D4855] hover:text-[#C5A85C] transition-all bg-[#FAF8F5] hover:bg-gray-150 px-3.5 py-2 rounded-xl border border-gray-200"
+          >
+            <Eye className="w-3 h-3 text-[#C5A85C]" />
+            <span>Open Detailed Journal</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Right side (Review/Discussion column) */}
+      <div className="w-full md:w-1/4 bg-[#FAF8F5] p-4.5 rounded-2xl border border-gray-150 flex flex-col justify-between">
+        <div>
+          <h5 className="text-[10px] uppercase font-bold text-[#0D4855] tracking-wider mb-3 pb-2 border-b border-gray-200 flex items-center gap-1">
+            <MessageSquare className="w-3.5 h-3.5 text-[#C5A85C]" />
+            Review Comments ({report.comments?.length || 0})
+          </h5>
+          
+          <div className="space-y-2.5 max-h-[140px] overflow-y-auto pr-1 custom-scrollbar text-[11px] mb-3">
+            {!report.comments || report.comments.length === 0 ? (
+              <p className="text-gray-400 italic text-center py-4">No comments posted yet.</p>
+            ) : (
+              report.comments.map((comment) => (
+                <div key={comment.id} className="bg-white p-2 rounded-lg border border-gray-150 relative text-left">
+                  <p className="font-extrabold text-[#0D4855] text-[9px] mb-0.5 flex justify-between">
+                    <span>{comment.author_name}</span>
+                    <span className="text-[8px] font-medium text-gray-400">
+                      {new Date(comment.created_at).toLocaleDateString()}
+                    </span>
+                  </p>
+                  <p className="text-gray-650 font-medium leading-normal whitespace-pre-wrap">{comment.comment_text}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Inline comment form */}
+        <form onSubmit={handlePostComment} className="flex gap-2 items-center mt-2 pt-2 border-t border-gray-200">
+          <input
+            type="text"
+            placeholder="Add a review note..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            disabled={isSubmitting}
+            className="flex-1 bg-white border border-gray-200 px-3 py-2 rounded-xl text-[11px] focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-medium"
+            required
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting || !commentText.trim()}
+            className="p-2 bg-[#0D4855] hover:bg-[#0A3D49] text-white rounded-xl shadow-sm transition-all flex items-center justify-center disabled:opacity-40"
+            title="Post Comment"
+          >
+            <Send className="w-3 h-3" />
+          </button>
+        </form>
+      </div>
+
+    </div>
+  );
+};
+
+interface AdminDashboardProps {
+  onOpenReport: (report: DailyReport) => void;
+  currentUser: Profile;
+}
+
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport, currentUser }) => {
   // Database States
   const [interns, setInterns] = useState<Profile[]>([]);
   const [reports, setReports] = useState<DailyReport[]>([]);
@@ -41,7 +191,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
   const [endDate, setEndDate] = useState('');
 
   // Tab State
-  const [activeTab, setActiveTab] = useState<'overview' | 'performance'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'daybook' | 'performance'>('overview');
+
+  // Onboarding Guide State
+  const [showGuide, setShowGuide] = useState<boolean>(() => {
+    const saved = localStorage.getItem('tadbeer_admin_show_guide');
+    return saved !== 'false';
+  });
+
+  const handleDismissGuide = () => {
+    setShowGuide(false);
+    localStorage.setItem('tadbeer_admin_show_guide', 'false');
+  };
+
+  // Daybook Specific Filter State
+  const [daybookQuery, setDaybookQuery] = useState('');
+  const [daybookIntern, setDaybookIntern] = useState('all');
+
+  // Daybook Reports filter logic
+  const daybookReports = reports.filter(r => {
+    const matchesQuery = !daybookQuery.trim() || 
+      (r.intern_name && r.intern_name.toLowerCase().includes(daybookQuery.toLowerCase())) ||
+      r.work_completed.toLowerCase().includes(daybookQuery.toLowerCase()) ||
+      (r.challenges && r.challenges.toLowerCase().includes(daybookQuery.toLowerCase())) ||
+      r.objectives.toLowerCase().includes(daybookQuery.toLowerCase());
+      
+    const matchesIntern = daybookIntern === 'all' || r.intern_id === daybookIntern;
+    
+    return matchesQuery && matchesIntern;
+  });
 
   // Detect mobile width and default to performance tab for prioritized main visual
   useEffect(() => {
@@ -193,13 +371,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       
       {/* Page Title */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
-        <div className="text-left">
-          <h2 className="text-3xl font-bold text-[#0D4855]">
-            Admin Control Panel
-          </h2>
-          <p className="text-sm text-gray-500 mt-1 font-medium">
-            Monitor intern progress, manage magic link invites, and review performance.
-          </p>
+        <div className="text-left flex items-start gap-3">
+          <div>
+            <h2 className="text-3xl font-bold text-[#0D4855] flex items-center gap-2">
+              <span>Admin Control Panel</span>
+              <button 
+                onClick={() => setShowGuide(!showGuide)} 
+                className="p-1 hover:bg-gray-100 rounded-lg text-[#C5A85C] transition-all"
+                title="Toggle Dashboard Guide"
+              >
+                <HelpCircle className="w-5 h-5" />
+              </button>
+            </h2>
+            <p className="text-sm text-gray-500 mt-1 font-medium">
+              Monitor intern progress, manage magic link invites, and review performance.
+            </p>
+          </div>
         </div>
 
         {/* Tab Navigation (Desktop Only) */}
@@ -216,6 +403,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
             Global Overview
           </button>
           <button
+            onClick={() => setActiveTab('daybook')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
+              activeTab === 'daybook'
+                ? 'bg-white text-[#0D4855] shadow-sm'
+                : 'text-gray-500 hover:text-[#0D4855]'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            Intern Day Book
+          </button>
+          <button
             onClick={() => setActiveTab('performance')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
               activeTab === 'performance'
@@ -228,6 +426,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           </button>
         </div>
       </div>
+
+      {/* Admin Onboarding & Guide */}
+      {showGuide && (
+        <div className="bg-white p-6 md:p-8 rounded-3xl border border-[#C5A85C]/35 shadow-sm relative overflow-hidden text-left transition-all">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#C5A85C]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          
+          <div className="flex justify-between items-start mb-6 relative z-10">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#C5A85C]" />
+              <h3 className="text-md font-extrabold text-[#0D4855] uppercase tracking-wider">
+                Admin Onboarding & Operations Guide
+              </h3>
+            </div>
+            <button
+              onClick={handleDismissGuide}
+              className="text-gray-400 hover:text-gray-600 text-xs font-bold px-3 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg hover:shadow-sm transition-all"
+            >
+              Got it, dismiss
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+            <div className="space-y-2 bg-[#FAF8F5] p-4.5 rounded-2xl border border-gray-100">
+              <div className="w-8 h-8 rounded-xl bg-[#0D4855]/5 flex items-center justify-center font-bold text-xs text-[#0D4855]">
+                1
+              </div>
+              <h4 className="text-xs font-extrabold text-[#0D4855]">Invite Interns</h4>
+              <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                Enter an email and name on the <strong>Overview</strong> tab to generate a secure Magic Link. Share this link with them to register their profile.
+              </p>
+            </div>
+
+            <div className="space-y-2 bg-[#FAF8F5] p-4.5 rounded-2xl border border-gray-100">
+              <div className="w-8 h-8 rounded-xl bg-[#0D4855]/5 flex items-center justify-center font-bold text-xs text-[#0D4855]">
+                2
+              </div>
+              <h4 className="text-xs font-extrabold text-[#0D4855]">Read Journals</h4>
+              <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                Open the new <strong>Intern Day Book</strong> to read full chronological journal posts. Filter by name or search keywords to track specific updates.
+              </p>
+            </div>
+
+            <div className="space-y-2 bg-[#FAF8F5] p-4.5 rounded-2xl border border-gray-100">
+              <div className="w-8 h-8 rounded-xl bg-[#0D4855]/5 flex items-center justify-center font-bold text-xs text-[#0D4855]">
+                3
+              </div>
+              <h4 className="text-xs font-extrabold text-[#0D4855]">Review Comments</h4>
+              <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                Leave instant, inline comments on any day's log inside the Day Book feed. Giving immediate review notes keeps interns fully aligned.
+              </p>
+            </div>
+
+            <div className="space-y-2 bg-[#FAF8F5] p-4.5 rounded-2xl border border-gray-100">
+              <div className="w-8 h-8 rounded-xl bg-[#0D4855]/5 flex items-center justify-center font-bold text-xs text-[#0D4855]">
+                4
+              </div>
+              <h4 className="text-xs font-extrabold text-[#0D4855]">Track Performance</h4>
+              <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                Switch to the <strong>Performance Hub</strong> to see 14-day hours trend charts, list completed tasks, and assign extra training tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {activeTab === 'overview' ? (
         <>
@@ -619,7 +881,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
 
       </div>
         </>
-      ) : (
+      )}
+
+      {activeTab === 'daybook' && (
+        <div className="space-y-6 text-left pb-12">
+          {/* Daybook Filters */}
+          <div className="bg-white rounded-3xl border border-gray-200/50 p-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-[#C5A85C]" />
+              <div>
+                <h3 className="text-lg font-bold text-[#0D4855]">Intern Day Book</h3>
+                <p className="text-[10px] text-gray-400 mt-0.5">Chronological feed of daily journals</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <div className="relative flex-1 sm:w-64">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                  <Search className="w-3.5 h-3.5" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search journals..."
+                  value={daybookQuery}
+                  onChange={(e) => setDaybookQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+                />
+              </div>
+
+              <select
+                value={daybookIntern}
+                onChange={(e) => setDaybookIntern(e.target.value)}
+                className="px-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              >
+                <option value="all">All Interns</option>
+                {interns.map(i => (
+                  <option key={i.id} value={i.id}>{i.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Daybook Feed */}
+          <div className="space-y-6">
+            {daybookReports.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-3xl border border-gray-200/50 shadow-sm">
+                <p className="text-sm text-gray-455 font-semibold">No journal entries found in the Day Book.</p>
+                <p className="text-xs text-gray-400 mt-1">Try resetting the search query or select another intern.</p>
+              </div>
+            ) : (
+              daybookReports.map((report) => (
+                <DayBookCard 
+                  key={report.id} 
+                  report={report} 
+                  adminUser={currentUser} 
+                  onRefresh={fetchData} 
+                  onOpenReport={onOpenReport}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'performance' && (
         <InternPerformanceView interns={interns} onOpenReport={onOpenReport} />
       )}
 
@@ -630,7 +955,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
             setActiveTab('overview');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className={`flex flex-col items-center gap-1.5 px-6 py-1 rounded-2xl transition-all ${
+          className={`flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-2xl transition-all ${
             activeTab === 'overview'
               ? 'text-[#0D4855] font-extrabold scale-105'
               : 'text-gray-400 font-medium'
@@ -641,10 +966,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
         </button>
         <button
           onClick={() => {
+            setActiveTab('daybook');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-2xl transition-all ${
+            activeTab === 'daybook'
+              ? 'text-[#0D4855] font-extrabold scale-105'
+              : 'text-gray-400 font-medium'
+          }`}
+        >
+          <BookOpen className="w-5 h-5" />
+          <span className="text-[10px] tracking-wide">Day Book</span>
+        </button>
+        <button
+          onClick={() => {
             setActiveTab('performance');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className={`flex flex-col items-center gap-1.5 px-6 py-1 rounded-2xl transition-all ${
+          className={`flex flex-col items-center gap-1.5 px-4 py-1.5 rounded-2xl transition-all ${
             activeTab === 'performance'
               ? 'text-[#0D4855] font-extrabold scale-105'
               : 'text-gray-400 font-medium'
