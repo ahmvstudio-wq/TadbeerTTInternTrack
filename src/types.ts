@@ -7,6 +7,9 @@ export interface Profile {
   name: string;
   role: UserRole;
   email?: string;
+  role_title?: string;
+  work_profile?: string;
+  objectives_to_achieve?: string;
   created_at: string;
 }
 

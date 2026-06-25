@@ -91,78 +91,78 @@ export const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
         </div>
 
         {/* Modal Scroll Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 text-left">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 text-left">
           
           {/* Metadata Grid */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-2 pb-1 bg-white p-3 rounded-2xl border border-gray-200/40 shadow-sm">
-            <div className="min-w-[120px] flex-1 snap-start flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#C5A85C]" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white p-4.5 rounded-2xl border border-gray-200/40 shadow-sm">
+            <div className="flex items-center gap-3">
+              <Calendar className="w-5 h-5 text-[#C5A85C]" />
               <div className="flex flex-col">
-                <span className="text-[8px] text-gray-400 uppercase tracking-wider font-medium">Date</span>
-                <span className="text-[10px] font-semibold text-[#0D4855]">{report.date}</span>
+                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Reporting Date</span>
+                <span className="text-sm font-semibold text-[#0D4855]">{report.date}</span>
               </div>
             </div>
-            <div className="min-w-[120px] flex-1 snap-start flex items-center gap-2 border-l border-gray-100 pl-2">
-              <Clock className="w-4 h-4 text-[#C5A85C]" />
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-[#C5A85C]" />
               <div className="flex flex-col">
-                <span className="text-[8px] text-gray-400 uppercase tracking-wider font-medium">Log</span>
-                <span className="text-[10px] font-semibold text-[#0D4855]">
-                  {report.start_time}-{report.end_time} ({report.hours_worked}h)
+                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Work Log</span>
+                <span className="text-sm font-semibold text-[#0D4855]">
+                  {report.start_time} - {report.end_time} ({report.hours_worked} hrs)
                 </span>
               </div>
             </div>
-            <div className="min-w-[100px] flex-1 snap-start flex items-center gap-2 border-l border-gray-100 pl-2">
+            <div className="flex items-center gap-3">
               <div className="flex flex-col">
-                <span className="text-[8px] text-gray-400 uppercase tracking-wider font-medium mb-0.5">Status</span>
+                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-medium mb-1">Status</span>
                 <div>{getStatusBadge(report.status)}</div>
               </div>
             </div>
           </div>
 
           {/* Form Fields Displays */}
-          <div className="space-y-3">
+          <div className="space-y-5">
             {/* Objectives */}
-            <div className="bg-white p-3 rounded-xl border border-gray-200/40 shadow-sm">
-              <h4 className="text-[10px] uppercase tracking-wider text-[#C5A85C] font-bold mb-1">Today's Objectives</h4>
-              <p className="text-[10px] text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.objectives}</p>
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/40 shadow-sm">
+              <h4 className="text-xs uppercase tracking-wider text-[#C5A85C] font-bold mb-2">Today's Objectives</h4>
+              <p className="text-sm text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.objectives}</p>
             </div>
 
             {/* Work Completed */}
-            <div className="bg-white p-3 rounded-xl border border-gray-200/40 shadow-sm">
-              <h4 className="text-[10px] uppercase tracking-wider text-[#C5A85C] font-bold mb-1">Work Completed</h4>
-              <p className="text-[10px] text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.work_completed}</p>
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/40 shadow-sm">
+              <h4 className="text-xs uppercase tracking-wider text-[#C5A85C] font-bold mb-2">Work Completed</h4>
+              <p className="text-sm text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.work_completed}</p>
             </div>
 
             {/* Conditionally Render Optional Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Challenges */}
               {report.challenges && (
-                <div className="bg-white p-3 rounded-xl border border-red-200/30 shadow-sm">
-                  <h4 className="text-[10px] uppercase tracking-wider text-red-500 font-bold mb-1">Challenges / Blockers</h4>
-                  <p className="text-[10px] text-red-800 leading-relaxed font-medium whitespace-pre-wrap">{report.challenges}</p>
+                <div className="bg-white p-5 rounded-2xl border border-red-200/30 shadow-sm">
+                  <h4 className="text-xs uppercase tracking-wider text-red-500 font-bold mb-2">Challenges / Blockers</h4>
+                  <p className="text-sm text-red-800 leading-relaxed font-medium whitespace-pre-wrap">{report.challenges}</p>
                 </div>
               )}
 
               {/* Suggestions */}
               {report.suggestions && (
-                <div className="bg-white p-3 rounded-xl border border-gray-200/40 shadow-sm">
-                  <h4 className="text-[10px] uppercase tracking-wider text-[#C5A85C] font-bold mb-1">Suggestions / Ideas</h4>
-                  <p className="text-[10px] text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.suggestions}</p>
+                <div className="bg-white p-5 rounded-2xl border border-gray-200/40 shadow-sm">
+                  <h4 className="text-xs uppercase tracking-wider text-[#C5A85C] font-bold mb-2">Suggestions / Ideas</h4>
+                  <p className="text-sm text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.suggestions}</p>
                 </div>
               )}
 
               {/* Waiting For */}
               {report.waiting_for && (
-                <div className="bg-white p-3 rounded-xl border border-yellow-200/30 shadow-sm">
-                  <h4 className="text-[10px] uppercase tracking-wider text-yellow-600 font-bold mb-1">Waiting For</h4>
-                  <p className="text-[10px] text-yellow-850 leading-relaxed font-medium whitespace-pre-wrap">{report.waiting_for}</p>
+                <div className="bg-white p-5 rounded-2xl border border-yellow-200/30 shadow-sm">
+                  <h4 className="text-xs uppercase tracking-wider text-yellow-600 font-bold mb-2">Waiting For</h4>
+                  <p className="text-sm text-yellow-850 leading-relaxed font-medium whitespace-pre-wrap">{report.waiting_for}</p>
                 </div>
               )}
 
               {/* Tomorrow's Plan */}
-              <div className="bg-white p-3 rounded-xl border border-gray-200/40 shadow-sm">
-                <h4 className="text-[10px] uppercase tracking-wider text-[#C5A85C] font-bold mb-1">Tomorrow's Plan</h4>
-                <p className="text-[10px] text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.tomorrow_plan}</p>
+              <div className="bg-white p-5 rounded-2xl border border-gray-200/40 shadow-sm">
+                <h4 className="text-xs uppercase tracking-wider text-[#C5A85C] font-bold mb-2">Tomorrow's Plan</h4>
+                <p className="text-sm text-[#0D4855] leading-relaxed font-medium whitespace-pre-wrap">{report.tomorrow_plan}</p>
               </div>
             </div>
           </div>

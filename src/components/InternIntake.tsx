@@ -4,11 +4,14 @@ import { User, Mail, ShieldCheck, ArrowRight, AlertCircle } from 'lucide-react';
 interface InternIntakeProps {
   email: string;
   defaultName: string;
-  onComplete: (name: string) => Promise<void>;
+  onComplete: (name: string, roleTitle: string, workProfile: string, objectivesToAchieve: string) => Promise<void>;
 }
 
 export const InternIntake: React.FC<InternIntakeProps> = ({ email, defaultName, onComplete }) => {
   const [name, setName] = useState(defaultName);
+  const [roleTitle, setRoleTitle] = useState('');
+  const [workProfile, setWorkProfile] = useState('');
+  const [objectivesToAchieve, setObjectivesToAchieve] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,11 +25,15 @@ export const InternIntake: React.FC<InternIntakeProps> = ({ email, defaultName, 
       setError('Name must be at least 3 characters.');
       return;
     }
+    if (!roleTitle.trim() || !workProfile.trim() || !objectivesToAchieve.trim()) {
+      setError('Please fill out all required fields.');
+      return;
+    }
 
     setIsSubmitting(true);
     setError(null);
     try {
-      await onComplete(name.trim());
+      await onComplete(name.trim(), roleTitle.trim(), workProfile.trim(), objectivesToAchieve.trim());
     } catch (err: any) {
       setError(err.message || 'Failed to complete profile registration.');
     } finally {
@@ -126,6 +133,48 @@ export const InternIntake: React.FC<InternIntakeProps> = ({ email, defaultName, 
               />
             </div>
             <p className="text-[9px] text-gray-400">Please provide your official name for reporting summaries.</p>
+          </div>
+
+          {/* Job Title */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500">Role / Job Title *</label>
+            <input
+              type="text"
+              placeholder="e.g. Marketing Intern, Frontend Developer"
+              value={roleTitle}
+              onChange={(e) => setRoleTitle(e.target.value)}
+              className="w-full px-4 py-3 bg-[#FAF8F5] border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A85C] focus:border-[#C5A85C] text-[#0D4855] placeholder-gray-400 font-semibold transition-all"
+              disabled={isSubmitting}
+              required
+            />
+          </div>
+
+          {/* Work Profile */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500">Work Profile *</label>
+            <textarea
+              placeholder="Briefly describe what your daily tasks and responsibilities will be..."
+              value={workProfile}
+              onChange={(e) => setWorkProfile(e.target.value)}
+              rows={2}
+              className="w-full px-4 py-3 bg-[#FAF8F5] border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A85C] focus:border-[#C5A85C] text-[#0D4855] placeholder-gray-400 font-medium transition-all resize-none"
+              disabled={isSubmitting}
+              required
+            />
+          </div>
+
+          {/* Objectives */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500">Objectives to Achieve *</label>
+            <textarea
+              placeholder="What are your main goals or milestones for this internship?"
+              value={objectivesToAchieve}
+              onChange={(e) => setObjectivesToAchieve(e.target.value)}
+              rows={2}
+              className="w-full px-4 py-3 bg-[#FAF8F5] border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#C5A85C] focus:border-[#C5A85C] text-[#0D4855] placeholder-gray-400 font-medium transition-all resize-none"
+              disabled={isSubmitting}
+              required
+            />
           </div>
 
           {/* Complete Button */}

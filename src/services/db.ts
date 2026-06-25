@@ -10,7 +10,9 @@ export const dbService = {
   login: async (email: string, _role: UserRole, password?: string): Promise<{ profile: Profile; token: string }> => {
     // Hard limit check for Admin: Only allow these specific admin credentials
     const adminEmails = ['w.taufiqq@gmail.com', 'operation@tadbeertt.com'];
-    if (!email || !adminEmails.includes(email.trim().toLowerCase())) {
+    const normalizedEmail = email.trim().toLowerCase();
+    
+    if (!email || !adminEmails.includes(normalizedEmail)) {
       throw new Error('Access denied. Only authorized administrators can login here.');
     }
     if (!password) {
@@ -21,14 +23,14 @@ export const dbService = {
 
     // 1. Try to sign in
     const { data: authData, error: authError } = await supabase!.auth.signInWithPassword({
-      email: adminEmail,
+      email: normalizedEmail,
       password: password,
     });
 
     if (authError) {
       // 2. If sign in fails, it might be the first time, auto-register the admin
       const { data: signUpData, error: signUpError } = await supabase!.auth.signUp({
-        email: adminEmail,
+        email: normalizedEmail,
         password: password,
       });
 
@@ -60,9 +62,9 @@ export const dbService = {
       const { data: newProfile, error: insertError } = await supabase!.from('profiles').insert([
         {
           id: userId,
-          name: 'Taufiqq',
+          name: normalizedEmail === 'w.taufiqq@gmail.com' ? 'Taufiqq' : 'Operation Admin',
           role: 'admin',
-          email: adminEmail,
+          email: normalizedEmail,
         }
       ]).select().single();
 
@@ -389,7 +391,7 @@ export const dbService = {
   },
 
   // Complete Intern Registration
-  completeInternRegistration: async (token: string, name: string): Promise<Profile> => {
+  completeInternRegistration: async (token: string, name: string, roleTitle: string, workProfile: string, objectivesToAchieve: string): Promise<Profile> => {
     const invite = await dbService.verifyInvitationToken(token);
 
     const { data: authData, error: authError } = await supabase!.auth.signUp({
@@ -409,6 +411,9 @@ export const dbService = {
           name,
           role: 'intern',
           email: invite.email,
+          role_title: roleTitle,
+          work_profile: workProfile,
+          objectives_to_achieve: objectivesToAchieve,
         }
       ])
       .select()

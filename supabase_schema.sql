@@ -3,10 +3,12 @@
 
 -- 1. Create Profiles Table (extends auth.users)
 create table if not exists public.profiles (
-  id uuid primary key,
+  id uuid references auth.users(id) on delete cascade primary key,
   name text not null,
-  role text not null check (role in ('admin', 'intern')),
-  email text,
+  role text check (role in ('admin', 'intern')) not null,
+  role_title text,
+  work_profile text,
+  objectives_to_achieve text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
