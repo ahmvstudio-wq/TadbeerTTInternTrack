@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dbService } from '../services/db';
 import type { Profile, DailyReport, InternTask } from '../types';
-import { Users, TrendingUp, CheckCircle, Plus, Calendar, Target, Clock } from 'lucide-react';
+import { Users, TrendingUp, CheckCircle, Plus, Calendar, Target, Clock, Activity, AlertCircle, CircleDashed, Trash2, UserCircle2 } from 'lucide-react';
 
 interface Props {
   interns: Profile[];
@@ -111,27 +111,14 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
       </div>
 
       {/* Main Content: Intern Performance Details */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3 pr-1">
+      <div className="flex-1 flex flex-col min-h-0 bg-[#FAF8F5] rounded-xl md:rounded-3xl p-3 md:p-6 lg:p-8 border border-gray-200">
         {!selectedIntern ? (
-          <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-12 text-center text-gray-400">
-            Select an intern from the list to view their performance metrics.
+          <div className="flex-1 flex flex-col items-center justify-center text-gray-400 h-full">
+            <UserCircle2 className="w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 text-gray-300" />
+            <p className="text-[10px] md:text-base font-bold text-center">Select an intern to view their performance metrics.</p>
           </div>
         ) : (
-          <>
-        </div>
-
-        <div className="flex-1 flex flex-col min-h-0 bg-[#FAF8F5] rounded-xl md:rounded-3xl p-3 md:p-6 lg:p-8 border border-gray-200">
-          {!selectedIntern ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-400 h-full">
-              <UserCircle2 className="w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 text-gray-300" />
-              <p className="text-[10px] md:text-base font-bold text-center">Select an intern to view their performance metrics.</p>
-            </div>
-          ) : isLoading ? (
-            <div className="flex-1 flex items-center justify-center h-full">
-              <div className="w-6 h-6 md:w-8 md:h-8 border-2 border-[#C5A85C] border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          ) : (
-            <div className="flex-1 flex flex-col min-h-0 gap-3 md:gap-6 custom-scrollbar overflow-y-auto pr-1 md:pr-2">
+          <div className="flex-1 flex flex-col min-h-0 gap-3 md:gap-6 custom-scrollbar overflow-y-auto pr-1 md:pr-2">
               
               <div className="flex overflow-x-auto md:grid md:grid-cols-4 snap-x snap-mandatory hide-scrollbar md:hide-scrollbar-none gap-2 md:gap-4 pb-1 md:pb-0 flex-shrink-0">
                 <div className="min-w-[120px] md:min-w-0 flex-1 snap-start bg-white p-3 md:p-5 rounded-xl md:rounded-2xl border border-gray-200/50 flex flex-col gap-1 md:gap-2 shadow-sm">
