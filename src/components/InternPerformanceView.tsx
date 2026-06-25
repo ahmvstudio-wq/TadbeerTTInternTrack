@@ -280,7 +280,6 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
               </div>
             </div>
           )}
-        </div>
       </div>
     </div>
   );
