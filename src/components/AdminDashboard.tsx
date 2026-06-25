@@ -491,7 +491,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport, cu
         </div>
       )}
 
-      {activeTab === 'overview' ? (
+      {activeTab === 'overview' && (
         <>
           {/* Aggregate Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
