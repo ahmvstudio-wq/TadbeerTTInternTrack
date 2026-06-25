@@ -182,165 +182,155 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+    <div className="h-full flex flex-col p-2 sm:p-4 overflow-hidden gap-3">
       
       {/* Page Title */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
-        <div className="text-left">
-          <h2 className="text-3xl font-bold text-[#0D4855]">
+      <div className="flex-shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="text-left hidden md:block">
+          <h2 className="text-xl font-bold text-[#0D4855]">
             Admin Control Panel
           </h2>
-          <p className="text-sm text-gray-500 mt-1 font-medium">
-            Monitor intern progress, manage magic link invites, and review performance.
-          </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 bg-[#FAF8F5] p-1.5 rounded-2xl border border-gray-200">
+        <div className="flex w-full md:w-auto items-center p-1 bg-[#FAF8F5] rounded-xl border border-gray-200 shadow-inner">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-[10px] transition-all ${
               activeTab === 'overview'
                 ? 'bg-white text-[#0D4855] shadow-sm'
                 : 'text-gray-500 hover:text-[#0D4855]'
             }`}
           >
-            <LayoutDashboard className="w-4 h-4" />
-            Global Overview
+            <LayoutDashboard className="w-3.5 h-3.5" />
+            Overview
           </button>
           <button
             onClick={() => setActiveTab('performance')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-[10px] transition-all ${
               activeTab === 'performance'
                 ? 'bg-white text-[#0D4855] shadow-sm'
                 : 'text-gray-500 hover:text-[#0D4855]'
             }`}
           >
-            <TrendingUp className="w-4 h-4" />
-            Intern Performance Hub
+            <TrendingUp className="w-3.5 h-3.5" />
+            Performance
           </button>
         </div>
       </div>
 
       {activeTab === 'overview' ? (
-        <>
+        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3 pr-1">
           {/* Aggregate Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* Total Interns */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-200/50 shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left">
-          <div className="w-12 h-12 rounded-2xl bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold text-[#0D4855]">
-              {stats.totalInterns}
-            </span>
-            <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-1">
-              Total Interns
-            </p>
-          </div>
-        </div>
+          <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-3 pb-1">
+            {/* Total Interns */}
+            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-lg bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
+                <Users className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                  {stats.totalInterns}
+                </span>
+                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                  Interns
+                </p>
+              </div>
+            </div>
 
-        {/* Reports Today */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-200/50 shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left">
-          <div className="w-12 h-12 rounded-2xl bg-green-500/5 flex items-center justify-center text-green-600">
-            <CheckCircle2 className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold text-[#0D4855]">
-              {stats.reportsToday}
-            </span>
-            <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-1">
-              Reports Submitted Today
-            </p>
-          </div>
-        </div>
+            {/* Reports Today */}
+            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-lg bg-green-500/5 flex items-center justify-center text-green-600">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                  {stats.reportsToday}
+                </span>
+                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                  Logs Today
+                </p>
+              </div>
+            </div>
 
-        {/* Pending Reports */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-200/50 shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left">
-          <div className="w-12 h-12 rounded-2xl bg-yellow-500/5 flex items-center justify-center text-yellow-600">
-            <AlertCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold text-[#0D4855]">
-              {stats.pendingReports}
-            </span>
-            <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-1">
-              Pending Today Logs
-            </p>
-          </div>
-        </div>
+            {/* Pending Reports */}
+            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-lg bg-yellow-500/5 flex items-center justify-center text-yellow-600">
+                <AlertCircle className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                  {stats.pendingReports}
+                </span>
+                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                  Pending
+                </p>
+              </div>
+            </div>
 
-        {/* Total Hours */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-200/50 shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left">
-          <div className="w-12 h-12 rounded-2xl bg-[#C5A85C]/5 flex items-center justify-center text-[#C5A85C]">
-            <Clock className="w-6 h-6" />
+            {/* Total Hours */}
+            <div className="min-w-[140px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-lg bg-[#C5A85C]/5 flex items-center justify-center text-[#C5A85C]">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-lg font-bold text-[#0D4855] leading-none">
+                  {stats.totalHours.toFixed(1)}
+                </span>
+                <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">
+                  Total Hrs
+                </p>
+              </div>
+            </div>
           </div>
-          <div>
-            <span className="text-2xl font-bold text-[#0D4855]">
-              {stats.totalHours.toFixed(1)}
-            </span>
-            <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-1">
-              Total Hours Logged
-            </p>
-          </div>
-        </div>
-
-      </div>
 
       {/* Intern Invites & Magic Links Management Console */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
         
         {/* Generate Invite Form */}
-        <div className="lg:col-span-1 bg-white rounded-3xl border border-gray-200/50 p-6 text-left shadow-sm">
-          <div className="flex items-center gap-2 mb-4">
-            <Link2 className="w-5 h-5 text-[#C5A85C]" />
-            <h3 className="text-md font-bold text-[#0D4855]">
-              Invite Intern (Magic Link)
+        <div className="lg:col-span-1 bg-white rounded-2xl border border-gray-200/50 p-4 text-left shadow-sm">
+          <div className="flex items-center gap-2 mb-3">
+            <Link2 className="w-4 h-4 text-[#C5A85C]" />
+            <h3 className="text-sm font-bold text-[#0D4855]">
+              Invite Intern
             </h3>
           </div>
           
-          <form onSubmit={handleInvite} className="space-y-4">
+          <form onSubmit={handleInvite} className="space-y-3">
             {inviteError && (
-              <div className="p-3 bg-red-50 text-red-600 border border-red-100 rounded-xl text-xs font-semibold">
+              <div className="p-2 bg-red-50 text-red-600 border border-red-100 rounded-lg text-[10px] font-bold">
                 {inviteError}
               </div>
             )}
             
             {inviteSuccess && (
-              <div className="p-3 bg-green-50 text-green-700 border border-green-100 rounded-xl text-xs font-semibold">
+              <div className="p-2 bg-green-50 text-green-700 border border-green-100 rounded-lg text-[10px] font-bold">
                 {inviteSuccess}
               </div>
             )}
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Intern Email *</label>
-              <input
-                type="email"
-                placeholder="intern@tadbeer.com"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-semibold"
-                required
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Temporary Name *</label>
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
-                placeholder="Aisha Al-Hashimi"
+                placeholder="Name *"
                 value={inviteName}
                 onChange={(e) => setInviteName(e.target.value)}
-                className="w-full px-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-semibold"
+                className="flex-1 px-2.5 py-1.5 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[10px] focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-bold"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email *"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                className="flex-1 px-2.5 py-1.5 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[10px] focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855] font-bold"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-xs rounded-xl shadow-sm transition-all"
+              className="w-full py-1.5 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-[10px] uppercase tracking-wider rounded-lg shadow-sm"
             >
               Generate Magic Link
             </button>
@@ -348,48 +338,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
 
           {/* Generated Magic Link Box */}
           {generatedLink && (
-            <div className="mt-5 p-3.5 bg-[#FAF8F5] border border-[#C5A85C]/25 rounded-2xl space-y-2">
-              <span className="text-[9px] uppercase tracking-wider font-bold text-[#C5A85C]">
-                Copy Secure Magic Link
+            <div className="mt-3 p-2 bg-[#FAF8F5] border border-[#C5A85C]/25 rounded-lg space-y-1.5">
+              <span className="text-[8px] uppercase tracking-wider font-bold text-[#C5A85C]">
+                Copy Secure Link
               </span>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-1.5 items-center">
                 <input
                   type="text"
                   value={generatedLink}
                   readOnly
-                  className="flex-1 bg-white border border-gray-200 px-3 py-1.5 rounded-lg text-[10px] font-mono text-gray-600 focus:outline-none select-all"
+                  className="flex-1 bg-white border border-gray-200 px-2 py-1 rounded text-[9px] font-mono text-gray-600 focus:outline-none select-all"
                 />
                 <button
                   onClick={() => handleCopyLink(generatedLink)}
-                  className="p-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-gray-500 hover:text-[#0D4855] transition-all"
-                  title="Copy link to clipboard"
+                  className="p-1.5 bg-white hover:bg-gray-50 border border-gray-200 rounded text-gray-500"
                 >
-                  {copiedLink ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedLink ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
                 </button>
               </div>
-              <p className="text-[9px] text-gray-400 leading-normal mt-1">
-                Send this link to the intern. They will set up their profile directly upon opening this URL.
-              </p>
             </div>
           )}
         </div>
 
         {/* Active / Pending Invitations List */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-200/50 p-6 text-left shadow-sm flex flex-col max-h-[380px]">
-          <div className="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
-            <Mail className="w-5 h-5 text-[#C5A85C]" />
-            <div>
-              <h3 className="text-md font-bold text-[#0D4855]">
-                Pending Invitations ({invitations.length})
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200/50 p-4 text-left shadow-sm flex flex-col max-h-[180px]">
+          <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+            <div className="flex items-center gap-1.5">
+              <Mail className="w-4 h-4 text-[#C5A85C]" />
+              <h3 className="text-sm font-bold text-[#0D4855]">
+                Pending ({invitations.length})
               </h3>
-              <p className="text-[9px] text-gray-400">Interns who haven't completed profile setup yet</p>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+          <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
             {invitations.length === 0 ? (
-              <div className="text-center py-12 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 flex flex-col justify-center items-center h-full">
-                <p className="text-xs text-gray-400 font-semibold">No pending invitations.</p>
+              <div className="text-center py-4 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
+                <p className="text-[10px] text-gray-400 font-bold">No pending invitations.</p>
               </div>
             ) : (
               invitations.map((invite) => {
@@ -397,35 +382,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
                 return (
                   <div
                     key={invite.id}
-                    className="p-3 bg-[#FAF8F5] border border-gray-200 rounded-2xl flex items-center justify-between gap-4"
+                    className="p-2 bg-[#FAF8F5] border border-gray-200 rounded-lg flex items-center justify-between gap-2"
                   >
                     <div className="flex flex-col text-left flex-1 min-w-0">
-                      <span className="text-xs font-bold text-[#0D4855] truncate">
+                      <span className="text-[10px] font-bold text-[#0D4855] truncate">
                         {invite.name}
                       </span>
-                      <span className="text-[10px] text-gray-500 font-medium truncate">
+                      <span className="text-[8px] text-gray-500 font-medium truncate">
                         {invite.email}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {/* Copy Link */}
+                    <div className="flex items-center gap-1 flex-shrink-0">
                       <button
                         onClick={() => handleCopyLink(inviteLink)}
-                        className="px-2.5 py-1.5 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl text-[10px] font-bold text-gray-500 hover:text-[#0D4855] transition-all flex items-center gap-1"
-                        title="Copy Link"
+                        className="p-1.5 bg-white border border-gray-200 rounded text-gray-500 hover:text-[#0D4855]"
                       >
                         <Copy className="w-3 h-3" />
-                        <span>Link</span>
                       </button>
-
-                      {/* Delete invite */}
                       <button
                         onClick={() => handleDeleteInvite(invite.id)}
-                        className="p-1.5 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded-xl text-gray-400 hover:text-red-600 transition-all"
-                        title="Revoke invitation"
+                        className="p-1.5 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded text-gray-400 hover:text-red-600"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
@@ -438,26 +417,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       </div>
 
       {/* Advanced Filters Panel */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-200/50 p-6 text-left transition-all">
-        <div className="flex items-center gap-2 mb-4">
-          <Filter className="w-4 h-4 text-[#C5A85C]" />
-          <h4 className="text-xs uppercase tracking-wider font-bold text-[#0D4855]">
-            Advanced Filters
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-3 text-left transition-all flex-shrink-0">
+        <div className="flex items-center gap-1.5 mb-2">
+          <Filter className="w-3.5 h-3.5 text-[#C5A85C]" />
+          <h4 className="text-[10px] uppercase tracking-wider font-bold text-[#0D4855]">
+            Filters
           </h4>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="flex overflow-x-auto gap-2 pb-1 hide-scrollbar">
           {/* Keyword Search */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-              <Search className="w-3.5 h-3.5" />
+          <div className="relative flex-shrink-0 w-32">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-400">
+              <Search className="w-3 h-3" />
             </span>
             <input
               type="text"
-              placeholder="Intern or keyword..."
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
             />
           </div>
 
@@ -465,7 +444,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           <select
             value={selectedIntern}
             onChange={(e) => setSelectedIntern(e.target.value)}
-            className="w-full px-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+            className="flex-shrink-0 w-24 px-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
           >
             <option value="all">All Interns</option>
             {interns.map(i => (
@@ -477,38 +456,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+            className="flex-shrink-0 w-24 px-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
           >
-            <option value="all">All Statuses</option>
+            <option value="all">All Status</option>
             <option value="completed">Completed</option>
             <option value="in_progress">In Progress</option>
             <option value="blocked">Blocked</option>
           </select>
 
           {/* Start Date */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#C5A85C]">
-              <Calendar className="w-3.5 h-3.5" />
+          <div className="relative flex-shrink-0 w-28">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-[#C5A85C]">
+              <Calendar className="w-3 h-3" />
             </span>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
               title="Start Date"
             />
           </div>
 
           {/* End Date */}
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#C5A85C]">
-              <Calendar className="w-3.5 h-3.5" />
+          <div className="relative flex-shrink-0 w-28">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-[#C5A85C]">
+              <Calendar className="w-3 h-3" />
             </span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-[#FAF8F5] border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+              className="w-full pl-6 pr-2 py-1 bg-[#FAF8F5] border border-gray-200 rounded-lg text-[9px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
               title="End Date"
             />
           </div>
@@ -516,102 +495,84 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       </div>
 
       {/* Main Data Table Panel */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-200/50 p-6 md:p-8 text-left transition-all">
+      <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200/50 p-3 flex flex-col min-h-0">
         
         {/* Table Title and Export options */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-[#C5A85C]" />
-            <div>
-              <h3 className="text-lg font-bold text-[#0D4855]">
-                Daily Logs Database
-              </h3>
-              <p className="text-[10px] text-gray-400 mt-0.5">
-                Displaying {filteredReports.length} journals matching current filter constraints
-              </p>
-            </div>
+        <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-gray-100 flex-shrink-0">
+          <div className="flex items-center gap-1.5">
+            <FileText className="w-4 h-4 text-[#C5A85C]" />
+            <h3 className="text-sm font-bold text-[#0D4855]">
+              Daily Logs ({filteredReports.length})
+            </h3>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => exportToExcel(filteredReports)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-xs font-bold rounded-xl text-gray-600 shadow-sm transition-all"
+              className="px-2 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-[9px] font-bold rounded text-green-600 shadow-sm"
             >
-              <FileDown className="w-3.5 h-3.5 text-green-600" />
-              <span>Export CSV</span>
+              CSV
             </button>
             <button
               onClick={() => exportToPDF(filteredReports)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-xs font-bold rounded-xl text-gray-600 shadow-sm transition-all"
+              className="px-2 py-1 bg-white hover:bg-gray-50 border border-gray-200 text-[9px] font-bold rounded text-red-500 shadow-sm"
             >
-              <FileDown className="w-3.5 h-3.5 text-red-500" />
-              <span>Print PDF</span>
+              PDF
             </button>
           </div>
         </div>
 
         {/* Data Table */}
-        {filteredReports.length === 0 ? (
-          <div className="text-center py-16 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-            <p className="text-sm text-gray-400 font-semibold">No journal reports found.</p>
-            <p className="text-xs text-gray-400 mt-1">Adjust filters or search fields above.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-gray-200 text-[10px] uppercase tracking-wider font-bold text-gray-400 pb-3.5">
-                  <th className="pb-3.5 font-bold">Intern Name</th>
-                  <th className="pb-3.5 font-bold">Date</th>
-                  <th className="pb-3.5 font-bold">Hours</th>
-                  <th className="pb-3.5 font-bold">Status</th>
-                  <th className="pb-3.5 font-bold">Submitted At</th>
-                  <th className="pb-3.5 font-bold text-right pr-4">Review</th>
+        <div className="flex-1 overflow-auto custom-scrollbar">
+          {filteredReports.length === 0 ? (
+            <div className="text-center py-8 bg-gray-50/50 rounded-lg border border-dashed border-gray-200">
+              <p className="text-[10px] text-gray-400 font-bold">No journal reports found.</p>
+            </div>
+          ) : (
+            <table className="w-full text-left border-collapse min-w-[320px]">
+              <thead className="sticky top-0 bg-white shadow-[0_1px_0_#f3f4f6]">
+                <tr className="text-[8px] uppercase tracking-wider font-bold text-gray-400">
+                  <th className="py-2 px-1">Intern</th>
+                  <th className="py-2 px-1">Date</th>
+                  <th className="py-2 px-1">Status</th>
+                  <th className="py-2 px-1 text-right">View</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-150 text-xs text-[#0D4855]">
+              <tbody className="divide-y divide-gray-100 text-[10px] text-[#0D4855]">
                 {filteredReports.map((report) => (
                   <tr
                     key={report.id}
                     onClick={() => onOpenReport(report)}
                     className="hover:bg-gray-50/70 transition-all cursor-pointer group"
                   >
-                    <td className="py-4 font-bold text-sm text-[#0D4855]">
+                    <td className="py-2 px-1 font-bold text-[#0D4855]">
                       {report.intern_name || 'N/A'}
                     </td>
-                    <td className="py-4 font-semibold text-gray-500">
-                      {report.date}
+                    <td className="py-2 px-1 font-semibold text-gray-500">
+                      {report.date.split('-').slice(1).join('/')}
                     </td>
-                    <td className="py-4 font-semibold text-gray-500">
-                      {report.hours_worked} hrs
-                    </td>
-                    <td className="py-4">
+                    <td className="py-2 px-1">
                       {getStatusBadge(report.status)}
                     </td>
-                    <td className="py-4 font-semibold text-gray-450">
-                      {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
-                    </td>
-                    <td className="py-4 text-right pr-4">
+                    <td className="py-2 px-1 text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           onOpenReport(report);
                         }}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-gray-100 text-[10px] font-bold rounded-lg border border-gray-200 text-gray-500 transition-all shadow-sm group-hover:border-[#C5A85C]/40 group-hover:text-[#0D4855]"
+                        className="inline-flex items-center justify-center w-6 h-6 bg-white hover:bg-gray-100 rounded border border-gray-200 text-[#C5A85C] shadow-sm"
                       >
-                        <Eye className="w-3 h-3 text-[#C5A85C]" />
-                        <span>Journal</span>
+                        <Eye className="w-3 h-3" />
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
-
+          )}
+        </div>
       </div>
-        </>
+        </div>
       ) : (
         <InternPerformanceView interns={interns} onOpenReport={onOpenReport} />
       )}

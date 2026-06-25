@@ -82,25 +82,25 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
   const maxHours = Math.max(...chartData.map(d => d.hours), 8); // At least 8 for scale
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-      {/* Sidebar: Interns List */}
-      <div className="w-full md:w-1/4 bg-white rounded-3xl border border-gray-200/50 shadow-sm p-5 h-fit">
-        <h3 className="text-md font-bold text-[#0D4855] flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-          <Users className="w-5 h-5 text-[#C5A85C]" />
+    <div className="h-full flex flex-col gap-3 min-h-0">
+      {/* Top Bar: Interns Horizontal Select */}
+      <div className="bg-white rounded-2xl border border-gray-200/50 shadow-sm p-3 flex-shrink-0">
+        <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Users className="w-3.5 h-3.5 text-[#C5A85C]" />
           Select Intern
         </h3>
-        <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+        <div className="flex overflow-x-auto gap-2 pb-1 custom-scrollbar snap-x">
           {interns.length === 0 ? (
-            <p className="text-xs text-gray-400 text-center py-4">No interns found</p>
+            <p className="text-[10px] text-gray-400 text-center w-full">No interns found</p>
           ) : (
             interns.map(intern => (
               <button
                 key={intern.id}
                 onClick={() => setSelectedInternId(intern.id)}
-                className={`text-left px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                className={`snap-start flex-shrink-0 text-left px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
                   selectedInternId === intern.id
-                    ? 'bg-[#0D4855] text-white shadow-md'
-                    : 'bg-[#FAF8F5] text-[#0D4855] hover:bg-gray-100'
+                    ? 'bg-[#0D4855] text-white shadow-sm'
+                    : 'bg-[#FAF8F5] text-[#0D4855] border border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 {intern.name}
@@ -111,7 +111,7 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
       </div>
 
       {/* Main Content: Intern Performance Details */}
-      <div className="w-full md:w-3/4 space-y-6">
+      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3 pr-1">
         {!selectedIntern ? (
           <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-12 text-center text-gray-400">
             Select an intern from the list to view their performance metrics.
@@ -119,40 +119,40 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
         ) : (
           <>
             {/* Header / Top Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white p-5 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
-                  <Clock className="w-5 h-5" />
+            <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-3 pb-1 flex-shrink-0">
+              <div className="min-w-[120px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#0D4855]/5 flex items-center justify-center text-[#0D4855]">
+                  <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-[#0D4855]">{totalHours.toFixed(1)}</span>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-0.5">Total Hours</p>
+                  <span className="text-lg font-bold text-[#0D4855] leading-none">{totalHours.toFixed(1)}</span>
+                  <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">Total Hrs</p>
                 </div>
               </div>
-              <div className="bg-white p-5 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#C5A85C]/10 flex items-center justify-center text-[#C5A85C]">
-                  <TrendingUp className="w-5 h-5" />
+              <div className="min-w-[120px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#C5A85C]/10 flex items-center justify-center text-[#C5A85C]">
+                  <TrendingUp className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-[#0D4855]">{avgHoursPerDay}</span>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-0.5">Avg Hrs / Day</p>
+                  <span className="text-lg font-bold text-[#0D4855] leading-none">{avgHoursPerDay}</span>
+                  <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">Hrs/Day</p>
                 </div>
               </div>
-              <div className="bg-white p-5 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600">
-                  <Calendar className="w-5 h-5" />
+              <div className="min-w-[120px] flex-1 snap-start bg-white p-3 rounded-2xl border border-gray-200/50 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center text-green-600">
+                  <Calendar className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-[#0D4855]">{daysActive}</span>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mt-0.5">Active Days</p>
+                  <span className="text-lg font-bold text-[#0D4855] leading-none">{daysActive}</span>
+                  <p className="text-[8px] uppercase tracking-wider font-bold text-gray-400 mt-0.5">Active</p>
                 </div>
               </div>
             </div>
 
             {/* Graphical Illustration: 14-Day Hours Worked Chart */}
-            <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-6 md:p-8">
-              <h3 className="text-md font-bold text-[#0D4855] mb-6 flex items-center gap-2">
-                <Target className="w-5 h-5 text-[#C5A85C]" />
+            <div className="bg-white rounded-2xl border border-gray-200/50 shadow-sm p-4">
+              <h3 className="text-sm font-bold text-[#0D4855] mb-2 flex items-center gap-1.5">
+                <Target className="w-4 h-4 text-[#C5A85C]" />
                 14-Day Activity Tracker
               </h3>
               
@@ -188,71 +188,67 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 min-h-0">
               {/* Task Manager */}
-              <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-6 flex flex-col">
-                <h3 className="text-md font-bold text-[#0D4855] mb-4 flex items-center gap-2 pb-3 border-b border-gray-100">
-                  <CheckCircle className="w-5 h-5 text-[#C5A85C]" />
+              <div className="bg-white rounded-2xl border border-gray-200/50 shadow-sm p-4 flex flex-col">
+                <h3 className="text-sm font-bold text-[#0D4855] mb-2 flex items-center gap-1.5 pb-2 border-b border-gray-100">
+                  <CheckCircle className="w-4 h-4 text-[#C5A85C]" />
                   Extra Tasks
                 </h3>
                 
                 {/* Add Task Form */}
-                <form onSubmit={handleAssignTask} className="mb-5 space-y-3 bg-[#FAF8F5] p-4 rounded-2xl border border-gray-150">
-                  <div>
+                <form onSubmit={handleAssignTask} className="mb-3 space-y-2 bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-150">
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="Task Title *"
                       value={newTaskTitle}
                       onChange={(e) => setNewTaskTitle(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+                      className="flex-1 px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-bold focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
                       required
                     />
+                    <button
+                      type="submit"
+                      disabled={isAssigning || !newTaskTitle.trim()}
+                      className="flex-shrink-0 flex items-center justify-center gap-1 px-3 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                   <div>
-                    <textarea
-                      rows={2}
-                      placeholder="Optional description or instructions..."
+                    <input
+                      type="text"
+                      placeholder="Optional description..."
                       value={newTaskDesc}
                       onChange={(e) => setNewTaskDesc(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
+                      className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-medium focus:outline-none focus:ring-1 focus:ring-[#C5A85C] text-[#0D4855]"
                     />
                   </div>
-                  <button
-                    type="submit"
-                    disabled={isAssigning || !newTaskTitle.trim()}
-                    className="flex items-center justify-center gap-1 w-full py-2 bg-[#0D4855] text-white hover:bg-[#0A3D49] font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all disabled:opacity-50"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    Assign Task
-                  </button>
                 </form>
 
                 {/* Tasks List */}
-                <div className="flex-1 overflow-y-auto max-h-[300px] space-y-2 pr-1 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto max-h-[200px] space-y-2 pr-1 custom-scrollbar">
                   {tasks.length === 0 ? (
-                    <p className="text-xs text-gray-400 text-center py-4 font-medium">No tasks assigned yet.</p>
+                    <p className="text-[10px] text-gray-400 text-center py-4 font-bold">No tasks assigned.</p>
                   ) : (
                     tasks.map(task => (
-                      <div key={task.id} className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm flex items-start gap-3">
+                      <div key={task.id} className="p-2 bg-[#FAF8F5] border border-gray-200 rounded-lg flex items-start gap-2">
                         <div className="mt-0.5">
                           {task.status === 'completed' ? (
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-3.5 h-3.5 text-green-500" />
                           ) : (
-                            <div className="w-4 h-4 rounded-full border-2 border-gray-300"></div>
+                            <div className="w-3.5 h-3.5 rounded-full border border-gray-300"></div>
                           )}
                         </div>
                         <div>
-                          <h4 className={`text-xs font-bold ${task.status === 'completed' ? 'text-gray-400 line-through' : 'text-[#0D4855]'}`}>
+                          <h4 className={`text-[10px] font-bold ${task.status === 'completed' ? 'text-gray-400 line-through' : 'text-[#0D4855]'}`}>
                             {task.title}
                           </h4>
                           {task.description && (
-                            <p className="text-[10px] text-gray-500 mt-1 leading-relaxed whitespace-pre-wrap">
+                            <p className="text-[8px] text-gray-500 mt-0.5 leading-tight line-clamp-2">
                               {task.description}
                             </p>
                           )}
-                          <p className="text-[8px] text-gray-400 mt-1.5 font-semibold uppercase tracking-wider">
-                            Assigned: {new Date(task.created_at).toLocaleDateString()}
-                          </p>
                         </div>
                       </div>
                     ))
@@ -261,9 +257,9 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
               </div>
 
               {/* Recent Logs History */}
-              <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-6 flex flex-col">
-                <h3 className="text-md font-bold text-[#0D4855] mb-4 flex items-center gap-2 pb-3 border-b border-gray-100">
-                  <Calendar className="w-5 h-5 text-[#C5A85C]" />
+              <div className="bg-white rounded-2xl border border-gray-200/50 shadow-sm p-4 flex flex-col">
+                <h3 className="text-sm font-bold text-[#0D4855] mb-2 flex items-center gap-1.5 pb-2 border-b border-gray-100">
+                  <Calendar className="w-4 h-4 text-[#C5A85C]" />
                   Recent Submissions
                 </h3>
                 <div className="flex-1 overflow-y-auto max-h-[460px] space-y-3 pr-1 custom-scrollbar">

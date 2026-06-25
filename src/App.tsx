@@ -145,7 +145,7 @@ function App() {
   // 1. Loading state for magic link verification
   if (verifyingToken) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] flex flex-col justify-center items-center p-6 text-center">
+      <div className="h-[100dvh] bg-[#FAF8F5] flex flex-col justify-center items-center p-6 text-center overflow-hidden">
         <div className="w-14 h-14 bg-white border border-[#C5A85C]/35 rounded-2xl flex items-center justify-center mb-6 shadow-sm animate-pulse">
           <svg viewBox="0 0 100 100" className="w-9 h-9 text-[#C5A85C]">
             <path
@@ -170,7 +170,7 @@ function App() {
   // 2. Error state for invalid/expired tokens
   if (tokenError) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] flex flex-col justify-center items-center p-6 text-center">
+      <div className="h-[100dvh] bg-[#FAF8F5] flex flex-col justify-center items-center p-6 text-center overflow-hidden">
         <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
           <div className="w-14 h-14 bg-red-50 border border-red-150 rounded-2xl flex items-center justify-center mb-6 mx-auto text-red-500 shadow-sm">
             <AlertCircle className="w-7 h-7" />
@@ -214,7 +214,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#0D4855] flex flex-col font-sans">
+    <div className="h-[100dvh] bg-[#FAF8F5] text-[#0D4855] flex flex-col font-sans overflow-hidden">
       {/* Header */}
       <Header
         user={currentUser}
@@ -222,18 +222,13 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-hidden flex flex-col">
         {currentUser.role === 'admin' ? (
           <AdminDashboard onOpenReport={handleOpenReport} />
         ) : (
           <InternDashboard user={currentUser} onOpenReport={handleOpenReport} />
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="w-full py-6 border-t border-gray-200/50 bg-[#FAF8F5]/50 text-center text-xs text-gray-400 font-medium">
-        Tadbeer Daily Work Tracker • Operations Blueprint v1.0
-      </footer>
 
       {/* Details Journal Modal Overlay */}
       {activeReport && (
