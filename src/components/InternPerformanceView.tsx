@@ -145,8 +145,8 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
 
   return (
     <div className="flex flex-col md:flex-row gap-8">
-      {/* Sidebar: Interns List (order-2 on mobile so graph shows first) */}
-      <div className="w-full md:w-1/4 bg-white rounded-3xl border border-gray-200/50 shadow-sm p-5 h-fit order-2 md:order-1">
+      {/* Sidebar: Interns List (Visible on desktop, hidden on mobile) */}
+      <div className="hidden md:block md:w-1/4 bg-white rounded-3xl border border-gray-200/50 shadow-sm p-5 h-fit">
         <h3 className="text-md font-bold text-[#0D4855] flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
           <Users className="w-5 h-5 text-[#C5A85C]" />
           Select Intern
@@ -172,8 +172,30 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
         </div>
       </div>
 
-      {/* Main Content: Intern Performance Details (order-1 on mobile so it's prioritized) */}
-      <div className="w-full md:w-3/4 space-y-6 order-1 md:order-2">
+      {/* Main Content: Intern Performance Details */}
+      <div className="w-full md:w-3/4 space-y-6">
+        {/* Horizontal Intern Selector on Mobile */}
+        {interns.length > 0 && (
+          <div className="md:hidden bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/50 shadow-sm space-y-2">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Select Intern</span>
+            <div className="flex overflow-x-auto gap-2.5 pb-2 -mx-2 px-2 scrollbar-none snap-x">
+              {interns.map(intern => (
+                <button
+                  key={intern.id}
+                  onClick={() => setSelectedInternId(intern.id)}
+                  className={`snap-start flex-shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all border ${
+                    selectedInternId === intern.id
+                      ? 'bg-[#0D4855] text-white border-[#0D4855] shadow-md scale-95'
+                      : 'bg-[#FAF8F5] text-[#0D4855] border-gray-200/60 hover:bg-gray-100'
+                  }`}
+                >
+                  {intern.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {!selectedIntern ? (
           <div className="bg-white rounded-3xl border border-gray-200/50 shadow-sm p-12 text-center text-gray-400">
             Select an intern from the list to view their performance metrics.

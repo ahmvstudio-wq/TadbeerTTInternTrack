@@ -43,6 +43,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
   // Tab State
   const [activeTab, setActiveTab] = useState<'overview' | 'performance'>('overview');
 
+  // Detect mobile width and default to performance tab for prioritized main visual
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setActiveTab('performance');
+    }
+  }, []);
+
   // Fetch initial data
   const fetchData = async () => {
     try {
@@ -182,7 +189,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 pb-24 md:pb-8">
       
       {/* Page Title */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
@@ -195,8 +202,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex items-center gap-2 bg-[#FAF8F5] p-1.5 rounded-2xl border border-gray-200">
+        {/* Tab Navigation (Desktop Only) */}
+        <div className="hidden md:flex items-center gap-2 bg-[#FAF8F5] p-1.5 rounded-2xl border border-gray-200">
           <button
             onClick={() => setActiveTab('overview')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
@@ -615,6 +622,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onOpenReport }) 
       ) : (
         <InternPerformanceView interns={interns} onOpenReport={onOpenReport} />
       )}
+
+      {/* Mobile Floating Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/80 p-2.5 flex justify-around items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] rounded-t-3xl">
+        <button
+          onClick={() => {
+            setActiveTab('overview');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-1.5 px-6 py-1 rounded-2xl transition-all ${
+            activeTab === 'overview'
+              ? 'text-[#0D4855] font-extrabold scale-105'
+              : 'text-gray-400 font-medium'
+          }`}
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="text-[10px] tracking-wide">Overview</span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('performance');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-1.5 px-6 py-1 rounded-2xl transition-all ${
+            activeTab === 'performance'
+              ? 'text-[#0D4855] font-extrabold scale-105'
+              : 'text-gray-400 font-medium'
+          }`}
+        >
+          <TrendingUp className="w-5 h-5" />
+          <span className="text-[10px] tracking-wide">Performance</span>
+        </button>
+      </div>
 
     </div>
   );
