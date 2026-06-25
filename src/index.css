@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tadbeer-teal: #0D4855;
+  --color-tadbeer-teal-50: #F4F8F9;
+  --color-tadbeer-teal-100: #E2EEF0;
+  --color-tadbeer-teal-200: #C0D9DE;
+  --color-tadbeer-teal-300: #93BCC4;
+  --color-tadbeer-teal-400: #6499A4;
+  --color-tadbeer-teal-500: #0D4855;
+  --color-tadbeer-teal-600: #0B3E49;
+  --color-tadbeer-teal-700: #09313A;
+  --color-tadbeer-teal-800: #062228;
+  --color-tadbeer-teal-900: #031114;
+
+  --color-tadbeer-gold: #C5A85C;
+  --color-tadbeer-gold-50: #FAF8F3;
+  --color-tadbeer-gold-100: #F4EDD6;
+  --color-tadbeer-gold-200: #E7D7AA;
+  --color-tadbeer-gold-300: #D5BD7B;
+  --color-tadbeer-gold-400: #C5A85C;
+  --color-tadbeer-gold-500: #AB8E46;
+  --color-tadbeer-gold-600: #8E7234;
+  --color-tadbeer-gold-700: #6E5624;
+  --color-tadbeer-gold-800: #4D3B18;
+  --color-tadbeer-gold-900: #30230B;
+
+  --color-tadbeer-cream: #FAF8F5;
+  --color-tadbeer-cream-dark: #F3EFE9;
+
+  /* Force all fonts to Inter */
+  --font-serif: "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--color-tadbeer-cream);
+  color: var(--color-tadbeer-teal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar Styles matching the premium theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-tadbeer-teal) 10%, transparent);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-tadbeer-teal) 20%, transparent);
+}
+
+/* Print Layout helper classes */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
