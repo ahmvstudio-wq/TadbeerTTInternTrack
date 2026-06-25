@@ -80,14 +80,14 @@ create policy "Enable read access for all authenticated users" on public.profile
   for select to authenticated using (true);
 
 create policy "Enable update for users based on email" on public.profiles 
-  for update to authenticated using (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+  for update to authenticated using (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));
 
 create policy "Enable insert for authenticated users only" on public.profiles 
   for insert to authenticated with check (true);
 
 -- Invitations Policies
-create policy "Admins can manage invitations" on public.invitations
-  for all to authenticated using (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+create policy "Admins can manage invitations" on public.invitations 
+  for all to authenticated using (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));
 
 create policy "Public can read invitations with token" on public.invitations
   for select using (true);
@@ -102,11 +102,11 @@ create policy "Interns can view their own reports" on public.daily_reports
 create policy "Interns can insert their own reports" on public.daily_reports 
   for insert to authenticated with check (auth.uid() = intern_id);
 
-create policy "Admins can view all reports" on public.daily_reports 
-  for select to authenticated using (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+create policy "Admins can read all reports" on public.daily_reports 
+  for select to authenticated using (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));
 
 create policy "Admins can update reports" on public.daily_reports 
-  for update to authenticated using (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+  for update to authenticated using (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));
 
 -- ----------------------------------------------------------------------------
 -- 5. Intern Tasks Table
@@ -127,7 +127,7 @@ create policy "Enable read for authenticated users" on public.intern_tasks
   for select to authenticated using (true);
 
 create policy "Enable insert for admins" on public.intern_tasks 
-  for insert to authenticated with check (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+  for insert to authenticated with check (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));
 
 create policy "Enable update for interns and admins" on public.intern_tasks 
   for update to authenticated using (true);
@@ -136,5 +136,5 @@ create policy "Enable update for interns and admins" on public.intern_tasks
 create policy "Users can view comments on accessible reports" on public.comments 
   for select to authenticated using (true);
 
-create policy "Admins can add comments" on public.comments 
-  for insert to authenticated with check (auth.jwt()->>'email' = 'w.taufiqq@gmail.com');
+create policy "Users can insert comments on reports" on public.comments 
+  for insert to authenticated with check (auth.jwt()->>'email' in ('w.taufiqq@gmail.com', 'operation@tadbeertt.com'));

@@ -8,10 +8,9 @@ const ensureSupabase = () => {
 export const dbService = {
   // Authentication (Supabase only)
   login: async (email: string, _role: UserRole, password?: string): Promise<{ profile: Profile; token: string }> => {
-    // Hard limit check for Admin: Only allow this specific admin credential for admin login
-    const adminEmail = 'w.taufiqq@gmail.com';
-    
-    if (email.trim().toLowerCase() !== adminEmail.toLowerCase()) {
+    // Hard limit check for Admin: Only allow these specific admin credentials
+    const adminEmails = ['w.taufiqq@gmail.com', 'operation@tadbeertt.com'];
+    if (!email || !adminEmails.includes(email.trim().toLowerCase())) {
       throw new Error('Access denied. Only authorized administrators can login here.');
     }
     if (!password) {

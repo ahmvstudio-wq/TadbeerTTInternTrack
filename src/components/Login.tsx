@@ -26,9 +26,10 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         throw new Error('Please enter your password.');
       }
 
-      // Hard limit check: only w.taufiqq@gmail.com is allowed as admin
-      if (email.trim().toLowerCase() !== 'w.taufiqq@gmail.com') {
-        throw new Error('Access denied. Only w.taufiqq@gmail.com is authorized to access the Admin Control Panel.');
+      // Hard limit check: only specified emails are allowed as admin
+      const emailLower = email.trim().toLowerCase();
+      if (emailLower !== 'w.taufiqq@gmail.com' && emailLower !== 'operation@tadbeertt.com') {
+        throw new Error('Access denied. Only authorized admins can access the Admin Control Panel.');
       }
 
       const { profile } = await dbService.login(email, 'admin', password);
