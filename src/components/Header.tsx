@@ -17,32 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
         
         {/* Tadbeer Logo & Branding */}
         <div className="flex items-center gap-3">
-          {/* SVG representation of the gold geometric logo in screenshot */}
-          <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-white rounded-xl border border-[#C5A85C]/20 shadow-sm">
-            <svg viewBox="0 0 100 100" className="w-7 h-7 text-[#C5A85C]">
-              <path
-                d="M 50,10 L 80,30 L 80,70 L 50,90 L 20,70 L 20,30 Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <circle cx="50" cy="50" r="14" fill="currentColor" className="opacity-80" />
-              <path
-                d="M 50,10 L 50,36 M 80,30 L 58,45 M 80,70 L 58,55 M 50,90 L 50,64 M 20,70 L 42,55 M 20,30 L 42,45"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-          <div className="flex flex-col select-none">
-            <span className="text-lg font-bold text-[#0D4855] tracking-widest uppercase">
-              Tadbeer
-            </span>
-            <span className="text-[9px] font-medium text-[#C5A85C] tracking-[0.25em] uppercase">
-              Transformation Trading
-            </span>
-          </div>
+          <img src="/logo.png" alt="Tadbeer Logo" className="h-10 w-auto object-contain" />
         </div>
 
         {/* Action pills & user profiles */}
