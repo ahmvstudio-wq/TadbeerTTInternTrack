@@ -164,6 +164,45 @@ export const InternPerformanceView: React.FC<Props> = ({ interns, onOpenReport }
                 </div>
               </div>
 
+              {/* Graphical Illustration: 14-Day Hours Worked Chart */}
+              <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200/50 shadow-sm p-3 md:p-6 flex-shrink-0">
+                <h3 className="text-[10px] md:text-sm font-bold text-[#0D4855] mb-2 md:mb-4 flex items-center gap-1.5 md:gap-2">
+                  <Target className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#C5A85C]" />
+                  14-Day Activity Tracker
+                </h3>
+                
+                {/* Pure CSS Bar Chart */}
+                <div className="h-32 md:h-48 flex items-end justify-between gap-1 mt-2 md:mt-4 border-b border-gray-100 pb-2 relative">
+                  {/* Horizontal Guide Lines */}
+                  <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+                    <div className="border-t border-dashed border-gray-400 w-full"></div>
+                    <div className="border-t border-dashed border-gray-400 w-full"></div>
+                    <div className="border-t border-dashed border-gray-400 w-full"></div>
+                  </div>
+
+                  {chartData.map((d, i) => {
+                    const heightPercent = (d.hours / maxHours) * 100;
+                    const isWeekend = new Date(d.date).getDay() === 0 || new Date(d.date).getDay() === 6;
+                    return (
+                      <div key={i} className="flex flex-col items-center flex-1 group z-10">
+                        <div 
+                          className="w-full max-w-[12px] md:max-w-[24px] bg-gradient-to-t from-[#0D4855] to-[#1A6C7E] rounded-t-sm transition-all duration-300 group-hover:from-[#C5A85C] group-hover:to-[#D9C07A] relative"
+                          style={{ height: `${heightPercent}%`, minHeight: d.hours > 0 ? '4px' : '0' }}
+                        >
+                          {/* Tooltip */}
+                          <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 bg-[#0D4855] text-white text-[8px] md:text-[10px] py-0.5 md:py-1 px-1.5 md:px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-md font-bold">
+                            {d.hours} hrs
+                          </div>
+                        </div>
+                        <span className={`text-[6px] md:text-[8px] mt-1.5 md:mt-2 font-bold transform -rotate-45 -translate-x-1 md:-translate-x-2 ${isWeekend ? 'text-gray-300' : 'text-gray-500'}`}>
+                          {d.date.split('-').slice(1).join('/')}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="flex-1 flex flex-col lg:flex-row min-h-0 gap-3 md:gap-6">
                 <div className="flex-1 flex flex-col min-h-[200px] lg:min-h-0 bg-white border border-gray-200 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
                   <div className="bg-[#FAF8F5] p-2.5 md:p-4 border-b border-gray-200 flex items-center justify-between">
